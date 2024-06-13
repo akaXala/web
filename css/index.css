@@ -1,3 +1,8 @@
 .pie {
     color: red;
 }
+
+.logo {
+    max-width: 100%;
+    align-items: start;
+}
