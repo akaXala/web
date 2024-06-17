@@ -1,31 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
     let objProductos = JSON.parse(productos);
 
-    let filas = "";
-    let columnas = 0;
-
     objProductos.forEach((objeto, indice)=>{
-        if (indice % 4 == 0) filas += `<div class="row>`;
-        filas += `
-            <div class="row">
-                <div class="col">
-                    <p>${objeto.id}</p>
-                    <h1>${objeto.title}</h1>
-                    <p>${objeto.description}</p>
-                    <p>${objeto.category}</p>
-                    <p>${objeto.price}</p>
-                </div>
+    carta = `
+        <div class="card" style="width: 18rem;">
+            <img src="${objeto.thumbnail}" class="card-img-top">
+            <div class="card-body">
+                <h5 class="card-title">${objeto.title}</h5>
+                <p class="card-text">${objeto.description}</p>
+                <a href="#" class="btn btn-primary">Ir</a>
             </div>
-        `;
-
-        if (columnas == 3){
-            filas += "</div> <!-- /row -->";
-            columnas = 1;
-        } else {
-            columnas++;
-        }
+        </div>
+    `;
     });
 
     let verProductos = document.querySelector("div#verProductos");
-    verProductos.innerHTML = filas;
+    verProductos.innerHTML = carta;
 });
