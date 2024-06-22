@@ -9,7 +9,7 @@ $email = $_POST["email"];
 $pass = $_POST["pass"];
 
 $cipherMethod = 'AES-256-CBC';
-$key = openssl_random_pseudo_bytes(32); // Generate a secure key
+$key = 'cifrado'; // Generate a secure key
 $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipherMethod)); // Generate an initialization vector
 
 $cipherPass = openssl_encrypt($pass, $cipherMethod, $key, 0, $iv);
@@ -31,4 +31,4 @@ if (mysqli_query($conn, $query)) {
 }
 
 mysqli_close($conn)
-    ?>
+?>
