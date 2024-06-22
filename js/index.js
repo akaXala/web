@@ -24,7 +24,7 @@ function displayProducts(products) {
                         <div class="card-body">
                             <h5 class="card-title">${product.title}</h5>
                             <p class="card-text">${product.description}</p>
-                            <a href="#" class="btn btn-primary">Ir</a>
+                            <a href="detallesProducto.html?id=${product.id}" class="btn btn-primary">Ir</a>
                         </div>
                     </div>
              </div>
