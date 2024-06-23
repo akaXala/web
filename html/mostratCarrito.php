@@ -52,6 +52,7 @@
                         echo "<tr><td>{$rowCart['titulo']}</td><td>{$rowCart['precio']}</td><td><img src='{$rowCart['miniatura']}' width='50' height='50'></td><td><a href='#' class='btn btn-danger'>Eliminar</a></td></tr>";
                     }
                     echo '</tbody></table>';
+                    echo "<div style='text-align: center; padding: 20px;'><a href='../php/buy.php' class='btn btn-success' style='padding: 10px 20px; font-size: 16px;'>Buy</a></div>";
                 } else {
                     echo "<p>No hay productos en el carrito.</p>";
                 }
