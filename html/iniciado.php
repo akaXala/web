@@ -40,6 +40,7 @@ if (!isset($_SESSION['correo'])) {
                 <form class="container-fluid justify-content-start d-flex align-items-center">
                     <p class="mb-0">Bienvenido: <?php echo $_SESSION['correo']; ?></p>
                     <a href="logout.php" class="btn btn-danger ms-2">Cerrar sesión</a>
+                    <a href="mostratCarrito.php" class="btn btn-danger ms-2">Mi Carrito</a>
                 </form>
             </div>
         </div>
