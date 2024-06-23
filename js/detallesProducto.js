@@ -88,7 +88,7 @@ function addToCart() {
     let formData = new FormData();
     formData.append('productId', productId);
 
-    fetch('add_to_cart.php', {
+    fetch('../php/add_to_cart.php', {
         method: 'POST',
         body: formData // Send as form data
     })

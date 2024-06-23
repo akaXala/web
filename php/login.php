@@ -32,7 +32,7 @@ if ($row = mysqli_fetch_assoc($result)) {
         error_log("Login successful: $correo");
 
         // Redirect user to welcome page
-        header("location: ../html/iniciado.php");
+        header("location: ../html/index.php");
         exit;
     } else {
         echo "No ingreso, contraseña incorrecta.";
