@@ -80,18 +80,23 @@ function displayProductDetails(product) {
 
 // Function to be called when the button is clicked
 function addToCart() {
-    // Retrieve the product ID here
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('id');
     console.log("Adding product with ID " + productId + " to cart.");
-    fetch('add_to_cart.php', {
+
+    // Create a FormData object and append the productId
+    let formData = new FormData();
+    formData.append('productId', productId);
+
+    fetch('../php/add_to_cart.php', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ productId: productId })
+        body: formData // Send as form data
     })
-        .then(response => response.json())
+        .then(response => response.text()) // Get the response text
+        .then(text => {
+            console.log(text); // Log the raw response text
+            return JSON.parse(text); // Parse it as JSON
+        })
         .then(data => {
             console.log(data);
             // Handle the response data here
