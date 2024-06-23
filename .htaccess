@@ -1,0 +1,11 @@
+RewriteEngine On
+# Asegúrate de cambiar 'localhost' si tu entorno local usa un nombre de host diferente
+
+# Redireccionar todas las solicitudes a index.php
+RewriteRule ^$ start.php [L]
+
+# Opcional: Redireccionar todas las solicitudes no existentes a index.php
+# Esto es útil para aplicaciones de una sola página o frameworks que manejan rutas internamente
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . start.php [L]

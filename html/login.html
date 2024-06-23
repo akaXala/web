@@ -3,46 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS para el formulario -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="../css/login.css">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
     <title>Login</title>
 </head>
 <body>
-    <div class="container" id="container">
-        <div class="form-container sign-up">
+    <div class="custom-container" id="container">
+        <div class="custom-form-container custom-sign-up">
             <form method="post" action="../php/registro.php">
-                <h1>Crear una cuenta</h1>
-                <span>Ingresa los datos que se te piden</span>
-                <input type="text" placeholder="Nombre" name="nombre">
-                <input type="text" placeholder="Apellido parterno" name="paterno">
-                <input type="text" placeholder="Apellido materno" name="materno">
-                <input type="text" placeholder="Número de telefono" name="tel">
-                <input type="email" placeholder="Correo" name="email">
-                <input type="password" placeholder="Contraseña" name="pass">
+                <h1 class="custom-heading">Crear una cuenta</h1>
+                <span class="custom-span">Ingresa los datos que se te piden</span>
+                <input type="text" placeholder="Nombre" name="nombre" class="form-control">
+                <span id="error-nombre" class="custom-error-message"></span>
+                <input type="text" placeholder="Apellido paterno" name="paterno" class="form-control">
+                <span id="error-apellido_paterno" class="custom-error-message"></span>
+                <input type="text" placeholder="Apellido materno" name="materno" class="form-control">
+                <span id="error-apellido_materno" class="custom-error-message"></span>
+                <input type="text" placeholder="Número de teléfono" name="tel" class="form-control">
+                <span id="error-telefono" class="custom-error-message"></span>
+                <input type="email" placeholder="Correo" name="email" class="form-control">
+                <span id="error-correo" class="custom-error-message"></span>
+                <input type="password" placeholder="Contraseña" name="pass" class="form-control">
+                <span id="error-contrasena" class="custom-error-message"></span>
                 <button type="submit">Registrarse</button>
             </form>
         </div>
-        <div class="form-container sign-in">
+        <div class="custom-form-container custom-sign-in">
             <form method="post" action="../php/login.php">
-                <h1>Inicia sesión</h1>
-                <span>Usa tu correo y contraseña</span>
+                <h1 class="custom-heading">Inicia sesión</h1>
+                <span class="custom-span">Usa tu correo y contraseña</span>
                 <input type="email" placeholder="Email" name="txtusuario">
+                <span id="error-correo" class="custom-error-message"></span>
                 <input type="password" placeholder="Password" name="txtpassword">
+                <span id="error-contrasena" class="custom-error-message"></span>
                 <a href="#">Olvidaste tu contraseña?</a>
                 <button type="submit">Inicia sesión</button>
             </form>
         </div>
-        <div class="toggle-container">
-            <div class="toggle">
-                <div class="toggle-panel toggle-left">
-                    <h1>Bienvenido de vuelta!</h1>
-                    <p>Ingresa tu información</p>
-                    <button class="hidden" id="login">Inicia sesión</button>
+        <div class="custom-toggle-container">
+            <div class="custom-toggle">
+                <div class="custom-toggle-panel custom-toggle-left">
+                    <h1 class="custom-heading">Bienvenido de vuelta!</h1>
+                    <p class="custom-paragraph">Ingresa tu información</p>
+                    <button class="custom-hidden" id="login">Inicia sesión</button>
                 </div>
-                <div class="toggle-panel toggle-right">
-                    <h1>Hola, compañero!</h1>
-                    <p>Registrate en el sitio!</p>
-                    <button class="hidden" id="register">Registrarse</button>
+                <div class="custom-toggle-panel custom-toggle-right">
+                    <h1 class="custom-heading">Hola, compañero!</h1>
+                    <p class="custom-paragraph">Registrate en el sitio!</p>
+                    <button class="custom-hidden" id="register">Registrarse</button>
                 </div>
             </div>
         </div>
