@@ -76,3 +76,35 @@ function displayProductDetails(product) {
     `;
     document.getElementById('product-details').innerHTML = productDetails;
 }
+
+
+// Function to be called when the button is clicked
+function addToCart() {
+    // Retrieve the product ID here
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+    console.log("Adding product with ID " + productId + " to cart.");
+    fetch('add_to_cart.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ productId: productId })
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // Handle the response data here
+        })
+        .catch(error => console.error('Error adding to cart:', error));
+}
+
+// Create a button element
+var button = document.createElement('button');
+button.innerHTML = 'Add to Cart';
+
+// Add an event listener to call addToCart function when the button is clicked
+button.addEventListener('click', addToCart);
+
+// Append the button to the body or any other element where you want the button to appear
+document.body.appendChild(button);
