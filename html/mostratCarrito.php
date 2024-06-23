@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <!-- CSS -->
     <link href="../css/index.css?ver=2.0" rel="stylesheet">
 </head>
+
 <body>
     <header>
         <marquee behavior="scroll" direction="left" class="marquee">
@@ -32,21 +34,22 @@
         <?php
         session_start(); // Start the session
         include '../php/conexion.php'; // Include the database connection
-
-        if(isset($_SESSION['correo'])) {
+        
+        if (isset($_SESSION['correo'])) {
             $email = $_SESSION['correo'];
             $queryUserId = "SELECT id FROM usuarios WHERE correo = '$email'";
             $resultUserId = mysqli_query($conn, $queryUserId);
-            if($rowUserId = mysqli_fetch_assoc($resultUserId)) {
+            if ($rowUserId = mysqli_fetch_assoc($resultUserId)) {
                 $userId = $rowUserId['id'];
-                $queryCart = "SELECT p.titulo, p.precio, c.idProducto FROM productos p INNER JOIN carritos c ON p.id = c.idProducto WHERE c.idUsuario = '$userId'";
+                $queryCart = "SELECT p.titulo, p.precio, p.miniatura, c.idProducto FROM productos p INNER JOIN carritos c ON p.id = c.idProducto WHERE c.idUsuario = '$userId'";
                 $resultCart = mysqli_query($conn, $queryCart);
-                if(mysqli_num_rows($resultCart) > 0) {
+                if (mysqli_num_rows($resultCart) > 0) {
                     echo '<table class="table">';
-                    echo '<thead><tr><th>Producto</th><th>Precio</th><th>Acciones</th></tr></thead>';
+                    echo '<thead><tr><th>Producto</th><th>Precio</th><th>Thumbnail</th><th>Acciones</th></tr></thead>';
                     echo '<tbody>';
-                    while($rowCart = mysqli_fetch_assoc($resultCart)) {
-                        echo "<tr><td>{$rowCart['titulo']}</td><td>{$rowCart['precio']}</td><td><a href='#' class='btn btn-danger'>Eliminar</a></td></tr>";
+                    while ($rowCart = mysqli_fetch_assoc($resultCart)) {
+                        // Include an <img> tag to display the thumbnail
+                        echo "<tr><td>{$rowCart['titulo']}</td><td>{$rowCart['precio']}</td><td><img src='{$rowCart['miniatura']}' width='50' height='50'></td><td><a href='#' class='btn btn-danger'>Eliminar</a></td></tr>";
                     }
                     echo '</tbody></table>';
                 } else {
@@ -66,4 +69,5 @@
         </div>
     </footer>
 </body>
+
 </html>
