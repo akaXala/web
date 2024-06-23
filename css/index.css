@@ -6,3 +6,7 @@
     max-width: 100%;
     align-items: start;
 }
+
+body header .marquee .marquee-text {
+    color: grey; /* Replace #yourColor with your desired color */
+}

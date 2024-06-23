@@ -1,26 +1,36 @@
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('Pagina cargada'); // Debug: Log when the page is loaded
+    console.log('Cargando productos...'); // Debug: Log when products are being loaded
+    let products = [];
+
     fetch('products.json')
         .then(response => response.json())
         .then(data => {
-            displayProducts(data.products);
+            products = data.products; // Store fetched products
+            displayProducts(products); // Display all products initially
         })
         .catch(error => console.error('Error loading JSON:', error));
+
+    // Event listener for the search input
+    document.getElementById('productSearch').addEventListener('input', (event) => {
+        const searchTerm = event.target.value.toLowerCase();
+        console.log(`Searching for: ${searchTerm}`); // Debug: Log the search term
+        displayProducts(products, searchTerm); // Filter and display products
+    });
 });
 
-function displayProducts(products) {
+function displayProducts(products, filter = '') {
     let filas = "";
-    let col = 0; // Contador de columnas
+    let col = 0;
 
-    products.forEach((product, indice) => {
-        // Iniciar una nueva fila cada 3 productos
+    // Filter products if a filter is provided
+    const filteredProducts = filter ? products.filter(product => product.title.toLowerCase().includes(filter)) : products;
+
+    filteredProducts.forEach((product, indice) => {
         if (indice % 3 == 0) {
-            if (indice !== 0) { // Si no es el primer producto, cierra la fila anterior
-                filas += '</div></div>';
-            }
-            filas += '<div class="container text-center"><div class="row align-items-start">';
+            filas += `<div class="container text-center"><div class="row align-items-start">`;
         }
-            
-        // Agregar el producto actual a la fila
+
         filas += `
             <div class="col">
                 <div class="card" style="width: 18rem;">
@@ -33,24 +43,19 @@ function displayProducts(products) {
                 </div>
             </div>
         `;
-            
-        // Incrementar el contador de columnas y reiniciar si es necesario
-        col = (col + 1) % 3;
+
+        if (col == 2) {
+            filas += `</div></div>`;
+            col = 0;
+        } else {
+            col++;
+        }
     });
 
-    // Cerrar la última fila si no se cerró previamente
+    // If there's an open row, close it
     if (col !== 0) {
-        filas += '</div></div>';
+        filas += `</div></div>`;
     }
 
     document.getElementById('products-container').innerHTML = filas;
-
-    // Restaurar la posición de desplazamiento después de que los productos se hayan añadido al DOM
-    const savedScrollPosition = localStorage.getItem('scrollPosition') || 0;
-    window.scrollTo(0, savedScrollPosition);
 }
-
-// Guardar la posición de desplazamiento antes de recargar
-window.addEventListener('beforeunload', function() {
-    localStorage.setItem('scrollPosition', window.scrollY || document.documentElement.scrollTop);
-});
