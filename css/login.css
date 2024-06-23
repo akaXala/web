@@ -189,7 +189,7 @@ body {
 
 .custom-error-message {
     color: red;
-    font-size: 0.7em; /* Reduce el tamaño de la fuente de los mensajes de error */
+    font-size: 0.6em; /* Reduce el tamaño de la fuente de los mensajes de error */
     margin-top: -8px; /* Ajusta el margen superior */
     margin-bottom: 8px; /* Ajusta el margen inferior */
 }

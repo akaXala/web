@@ -101,11 +101,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     loginForm.addEventListener("submit", (e) => {
-        if (campos.correo && campos.contrasena) {
-            loginForm.submit();
-        } else {
+        const email = document.querySelector('input[name="txtusuario"]');
+        const pass = document.querySelector('input[name="txtpassword"]');
+
+        // Verificar que los campos no estén en blanco
+        if (email.value.trim() === "" || pass.value.trim() === "") {
             e.preventDefault();
-            alert("Por favor, ingrese su correo y contraseña correctamente.");
+            alert("Por favor, ingrese su correo y contraseña.");
+        } else {
+            // Enviar el formulario si ambos campos están llenos
+            loginForm.submit();
         }
     });
 });

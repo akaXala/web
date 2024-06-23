@@ -18,6 +18,6 @@ if (ini_get("session.use_cookies")) {
 session_destroy();
 
 // Redirect to login page or home page
-header("location: login.html"); // Adjust the path as needed.
+header("location: ../html/login.html"); // Adjust the path as needed.
 exit;
 ?>

@@ -39,7 +39,7 @@ if (!isset($_SESSION['correo'])) {
             <div class="ms-auto">
                 <form class="container-fluid justify-content-start d-flex align-items-center">
                     <p class="mb-0">Bienvenido: <?php echo $_SESSION['correo']; ?></p>
-                    <a href="logout.php" class="btn btn-danger ms-2">Cerrar sesión</a>
+                    <a href="../php/logout.php" class="btn btn-danger ms-2">Cerrar sesión</a>
                 </form>
             </div>
         </div>
@@ -50,7 +50,6 @@ if (!isset($_SESSION['correo'])) {
         </div>
         <div id="products-container">
         </div>
-        <a href="./JSON.html"><button type="button" class="btn btn-success">Revisa el JSON completo</button></a>
     </main>
     <footer>
         <p class="pie">Pendejos S.A de C.V</p>
