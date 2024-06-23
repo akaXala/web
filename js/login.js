@@ -79,47 +79,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    const validarEspaciosEnBlanco = (inputs) => {
-        let sinEspacios = true;
-        inputs.forEach((input) => {
-            if (input.value.trim() === '') {
-                const campo = input.name;
-                const mensajeError = document.querySelector(`#error-${campo}`);
-                input.classList.add("is-invalid");
-                mensajeError.innerText = "Este campo no puede contener solo espacios en blanco.";
-                sinEspacios = false;
-            }
-        });
-        return sinEspacios;
-    };
-
     inputs.forEach((input) => {
         input.addEventListener("keyup", validarFormulario);
         input.addEventListener("blur", validarFormulario);
     });
 
     registerForm.addEventListener("submit", (e) => {
-        e.preventDefault();
         if (
             campos.correo &&
             campos.contrasena &&
             campos.nombre &&
             campos.apellido_paterno &&
             campos.apellido_materno &&
-            campos.telefono &&
-            validarEspaciosEnBlanco(inputs)
+            campos.telefono
         ) {
             registerForm.submit();
         } else {
+            e.preventDefault();
             alert("Por favor, rellena el formulario correctamente.");
         }
     });
 
     loginForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        if (campos.correo && campos.contrasena && validarEspaciosEnBlanco(inputs)) {
+        if (campos.correo && campos.contrasena) {
             loginForm.submit();
         } else {
+            e.preventDefault();
             alert("Por favor, ingrese su correo y contraseña correctamente.");
         }
     });
