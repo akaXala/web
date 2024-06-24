@@ -1,29 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JSON</title>
-    
-    <!-- JS -->
-    <script src="../js/JSON.js"></script>
+document.getElementById('login-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var email = document.getElementById('txtusuario').value;
+    var password = document.getElementById('txtpassword').value;
+    var errorCorreo = document.getElementById('error-correo');
+    var errorContrasena = document.getElementById('error-contrasena');
 
-    <!-- Styles de rapido -->
-    <style>
-        .product {
-            border: 1px solid #ddd;
-            margin: 10px;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .product img {
-            max-width: 100px;
-            height: auto;
-        }
-    </style>
+    // Limpiar mensajes de error
+    errorCorreo.textContent = '';
+    errorContrasena.textContent = '';
 
-</head>
-<body>
-    <div id="products-container"></div>
-</body>
-</html>
+    // Validar correo
+    if (!email) {
+        errorCorreo.textContent = 'El correo es obligatorio.';
+        return;
+    }
+
+    // Validar contraseña
+    if (!password) {
+        errorContrasena.textContent = 'La contraseña es obligatoria.';
+        return;
+    }
+
+    // Enviar el formulario si todo es válido
+    this.submit();
+});

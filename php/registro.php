@@ -21,14 +21,27 @@ if ($cipherPass === false) {
 $base64CipherPass = base64_encode($cipherPass);
 $base64Iv = base64_encode($iv);
 
-// Update your query to insert the base64-encoded encrypted password and IV
-$query = "INSERT INTO usuarios (nombre, primerAp, segundoAp, telefono, correo, contrasena, CipherPass) VALUES ('$nombre', '$apP', '$apM', '$tel', '$email', '$base64CipherPass', '$base64Iv')";
+// Verificar si el correo o el número de teléfono ya existen en la base de datos
+$checkQuery = "SELECT * FROM usuarios WHERE correo = '$email' OR telefono = '$tel'";
+$result = mysqli_query($conn, $checkQuery);
 
-if (mysqli_query($conn, $query)) {
-    echo "Registro exitoso";
+if (mysqli_num_rows($result) > 0) {
+    $row = mysqli_fetch_assoc($result);
+    if ($row['correo'] == $email) {
+        echo json_encode(array("status" => "error", "field" => "correo", "message" => "El correo ya está registrado."));
+    } elseif ($row['telefono'] == $tel) {
+        echo json_encode(array("status" => "error", "field" => "telefono", "message" => "El número de teléfono ya está registrado."));
+    }
 } else {
-    echo "Error: " . $query . "<br>" . mysqli_error($conn);
+    // Si no existen, procede con la inserción
+    $query = "INSERT INTO usuarios (nombre, primerAp, segundoAp, telefono, correo, contrasena, CipherPass) VALUES ('$nombre', '$apP', '$apM', '$tel', '$email', '$base64CipherPass', '$base64Iv')";
+    if (mysqli_query($conn, $query)) {
+        $userID = mysqli_insert_id($conn);
+        echo json_encode(array("status" => "success", "userID" => $userID, "message" => "Registro exitoso."));
+    } else {
+        echo json_encode(array("status" => "error", "message" => "Error: " . mysqli_error($conn)));
+    }
 }
 
-mysqli_close($conn)
+mysqli_close($conn);
 ?>

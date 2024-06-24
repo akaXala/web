@@ -13,6 +13,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
         .catch(error => console.error('Error loading JSON:', error));
+
+    // Create a button element
+    var button = document.createElement('button');
+    button.innerHTML = 'Add to Cart';
+
+    // Add an event listener to call addToCart function when the button is clicked
+    button.addEventListener('click', addToCart);
+
+    // Append the button to the body or any other element where you want the button to appear
+    document.body.appendChild(button);
 });
 
 function displayProductDetails(product) {
@@ -77,7 +87,6 @@ function displayProductDetails(product) {
     document.getElementById('product-details').innerHTML = productDetails;
 }
 
-
 // Function to be called when the button is clicked
 function addToCart() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -92,24 +101,14 @@ function addToCart() {
         method: 'POST',
         body: formData // Send as form data
     })
-        .then(response => response.text()) // Get the response text
-        .then(text => {
-            console.log(text); // Log the raw response text
-            return JSON.parse(text); // Parse it as JSON
-        })
-        .then(data => {
+    .then(response => response.json()) // Parse the response as JSON
+    .then(data => {
+        if (data.status === 'error' && data.message === 'Not logged in') {
+            window.location.href = '../html/login.html'; // Redirigir a la página de inicio de sesión
+        } else {
             console.log(data);
             // Handle the response data here
-        })
-        .catch(error => console.error('Error adding to cart:', error));
+        }
+    })
+    .catch(error => console.error('Error adding to cart:', error));
 }
-
-// Create a button element
-var button = document.createElement('button');
-button.innerHTML = 'Add to Cart';
-
-// Add an event listener to call addToCart function when the button is clicked
-button.addEventListener('click', addToCart);
-
-// Append the button to the body or any other element where you want the button to appear
-document.body.appendChild(button);
