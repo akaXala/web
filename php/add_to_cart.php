@@ -45,6 +45,13 @@ if (isset($_POST['productId'])) {
             echo json_encode(["status" => "error", "message" => "Failed to add product to the cart."]);
             exit;
         }
+    
+    $query = "INSERT INTO carritos (idUsuario, idProducto) VALUES ('$userId', '$productId')";
+    if (mysqli_query($conn, $query)) {
+        $response = [
+            "message" => "Product with ID $productId added to the cart.",
+            "productId" => $productId
+        ];
     } else {
         echo json_encode(["status" => "error", "message" => "User not found."]);
         exit;

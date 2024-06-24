@@ -48,10 +48,10 @@
                     echo '<thead><tr><th>Producto</th><th>Precio</th><th>Thumbnail</th><th>Acciones</th></tr></thead>';
                     echo '<tbody>';
                     while ($rowCart = mysqli_fetch_assoc($resultCart)) {
-                        // Include an <img> tag to display the thumbnail
-                        echo "<tr><td>{$rowCart['titulo']}</td><td>{$rowCart['precio']}</td><td><img src='{$rowCart['miniatura']}' width='50' height='50'></td><td><a href='#' class='btn btn-danger'>Eliminar</a></td></tr>";
+                        echo "<tr><td>{$rowCart['titulo']}</td><td>{$rowCart['precio']}</td><td><img src='{$rowCart['miniatura']}' width='50' height='50'></td><td><a href='../php/deleteFromCart.php?idProducto={$rowCart['idProducto']}' class='btn btn-danger'>Eliminar</a></td></tr>";
                     }
                     echo '</tbody></table>';
+                    echo "<div style='text-align: center; padding: 20px;'><a href='../php/buy.php' class='btn btn-success' style='padding: 10px 20px; font-size: 16px;'>Buy</a></div>";
                 } else {
                     echo "<p>No hay productos en el carrito.</p>";
                 }
