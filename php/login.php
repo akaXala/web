@@ -14,6 +14,8 @@ mysqli_stmt_bind_param($stmt, "s", $correo);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 
+$response = array();
+
 if ($row = mysqli_fetch_assoc($result)) {
     $encryptedPass = base64_decode($row['contrasena']);
     $iv = base64_decode($row['CipherPass']);
@@ -32,18 +34,26 @@ if ($row = mysqli_fetch_assoc($result)) {
         error_log("Login successful: $correo");
 
         // Redirect user to welcome page
-        header("location: ../html/index.php");
-        exit;
+        $response["status"] = "success";
+        $response["message"] = "Login successful";
     } else {
-        echo "No ingreso, contraseña incorrecta.";
         // Debug log
         error_log("Login failed for $correo: Incorrect password");
+
+        $response["status"] = "error";
+        $response["message"] = "Contraseña incorrecta.";
     }
 } else {
-    echo "No ingreso, usuario no existe.";
     // Debug log
     error_log("Login failed: User $correo does not exist");
+
+    $response["status"] = "error";
+    $response["message"] = "Usuario no existe.";
 }
 
 mysqli_close($conn);
+
+header('Content-Type: application/json');
+echo json_encode($response);
+exit;
 ?>
