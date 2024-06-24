@@ -24,7 +24,6 @@ if(isset($_POST['productId'])) {
         exit;
     }
     
-
     $query = "INSERT INTO carritos (idUsuario, idProducto) VALUES ('$userId', '$productId')";
     if (mysqli_query($conn, $query)) {
         $response = [
