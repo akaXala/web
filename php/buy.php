@@ -111,6 +111,27 @@
                 echo 'Compra realizada con éxito.';
                 echo '</div>';
 
+                foreach ($productIds as $productId) {
+                    // Check if the product ID is already in the "numeroCompras" table
+                    $checkProductQuery = "SELECT * FROM numeroCompras WHERE idProducto = '$productId'";
+                    $resultCheckProduct = mysqli_query($conn, $checkProductQuery);
+                
+                    if (mysqli_num_rows($resultCheckProduct) > 0) {
+                        // If the product ID is already in the table, increment the "compras" value by 1
+                        $updateProductQuery = "UPDATE numeroCompras SET compras = compras + 1 WHERE idProducto = '$productId'";
+                        $resultUpdateProduct = mysqli_query($conn, $updateProductQuery);
+                        if (!$resultUpdateProduct) {
+                            echo "Error updating product's number of purchases for product ID: $productId<br>";
+                        }
+                    } else {
+                        // If the product ID is not in the table, insert a new row with the product ID and set "compras" to 1
+                        $insertProductQuery = "INSERT INTO numeroCompras (idProducto, compras) VALUES ('$productId', 1)";
+                        $resultInsertProduct = mysqli_query($conn, $insertProductQuery);
+                        if (!$resultInsertProduct) {
+                            echo "Error inserting product into the 'numeroCompras' table for product ID: $productId<br>";
+                        }
+                    }
+                }
 
 
                 // Clear the cart after the purchase
@@ -119,6 +140,9 @@
                 if (!$resultClearCart) {
                     echo "Error al limpiar el carrito.<br>";
                 }
+
+
+
 
             } else {
                 echo "<p>Error al obtener el usuario.</p>";
