@@ -52,25 +52,32 @@
                 }
                 // Reduce stock by 1 for each product
                 foreach ($productIds as $productId) {
-                    $updateStockQuery = "UPDATE productos SET stock = stock - 1 WHERE id = '$productId'";
-                    $resultUpdateStock = mysqli_query($conn, $updateStockQuery);
-                    if (!$resultUpdateStock) {
-                        echo "Error updating stock for product ID: $productId<br>";
-                    }
-                }
-                echo '<div class="alert alert-success" role="alert">';
-                echo 'Compra realizada con éxito.';
-                echo '</div>';
+                    // Check if the product is available
+                    $checkStockQuery = "SELECT stock FROM productos WHERE id = '$productId' AND stock > 0";
+                    $resultCheckStock = mysqli_query($conn, $checkStockQuery);
+                    if (mysqli_num_rows($resultCheckStock) > 0) {
+                        // If the product is available, update the stock
+                        $updateStockQuery = "UPDATE productos SET stock = stock - 1 WHERE id = '$productId'";
+                        $resultUpdateStock = mysqli_query($conn, $updateStockQuery);
+                        if ($resultUpdateStock) {
+                            // Calculate the total price
+                            $totalPrice = array_sum($productPrices);
 
-                // Calculate the total price
-                $totalPrice = array_sum($productPrices);
+                            // Subtract the total price from the user's "creditos"
+                            $updateCreditosQuery = "UPDATE usuarios SET creditos = creditos - $totalPrice WHERE id = '$userId'";
+                            $resultUpdateCreditos = mysqli_query($conn, $updateCreditosQuery);
+                            if (!$resultUpdateCreditos) {
+                                echo "Error updating user's creditos.";
+                            }
 
-                // Subtract the total price from the user's "creditos"
-                $updateCreditosQuery = "UPDATE usuarios SET creditos = creditos - $totalPrice WHERE id = '$userId'";
-                $resultUpdateCreditos = mysqli_query($conn, $updateCreditosQuery);
-                if (!$resultUpdateCreditos) {
-                    echo "Error updating user's creditos.";
-                }
+                            // Call the "orden.php" script and pass the arrays as parameters
+                            $url = 'http://localhost/web/php/orden.php';
+                            $data = array(
+                                'productIds' => $productIds,
+                                'productPrices' => $productPrices,
+                                'productStocks' => $productStocks,
+                                'totalPrice' => $totalPrice
+                            );
 
                 // Call the "orden.php" script and pass the arrays as parameters
                 $url = 'http://localhost/web/php/orden.php';
@@ -82,21 +89,54 @@
                     'userId' => $userId
                 );
 
-                $options = array(
-                    'http' => array(
-                        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-                        'method'  => 'POST',
-                        'content' => http_build_query($data)
-                    )
-                );
+                            $options = array(
+                                'http' => array(
+                                    'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                                    'method' => 'POST',
+                                    'content' => http_build_query($data)
+                                )
+                            );
 
-                $context  = stream_context_create($options);
-                $result = file_get_contents($url, false, $context);
+                            $context = stream_context_create($options);
+                            $result = file_get_contents($url, false, $context);
 
-                if ($result === false) {
-                    echo "Error calling the 'orden.php' script.";
-                } else {
-                    echo $result;
+                            if ($result === false) {
+                                echo "Error calling the 'orden.php' script.";
+                            } else {
+                                echo $result;
+                            }
+                        } else {
+                            echo "Error updating stock for product ID: $productId<br>";
+                        }
+                    } else {
+                        // Inform the user that the product is out of stock
+                        echo "Product ID: $productId is out of stock and cannot be bought.<br>";
+                    }
+                }
+                echo '<div class="alert alert-success" role="alert">';
+                echo 'Compra realizada con éxito.';
+                echo '</div>';
+
+                foreach ($productIds as $productId) {
+                    // Check if the product ID is already in the "numeroCompras" table
+                    $checkProductQuery = "SELECT * FROM numeroCompras WHERE idProducto = '$productId'";
+                    $resultCheckProduct = mysqli_query($conn, $checkProductQuery);
+                
+                    if (mysqli_num_rows($resultCheckProduct) > 0) {
+                        // If the product ID is already in the table, increment the "compras" value by 1
+                        $updateProductQuery = "UPDATE numeroCompras SET compras = compras + 1 WHERE idProducto = '$productId'";
+                        $resultUpdateProduct = mysqli_query($conn, $updateProductQuery);
+                        if (!$resultUpdateProduct) {
+                            echo "Error updating product's number of purchases for product ID: $productId<br>";
+                        }
+                    } else {
+                        // If the product ID is not in the table, insert a new row with the product ID and set "compras" to 1
+                        $insertProductQuery = "INSERT INTO numeroCompras (idProducto, compras) VALUES ('$productId', 1)";
+                        $resultInsertProduct = mysqli_query($conn, $insertProductQuery);
+                        if (!$resultInsertProduct) {
+                            echo "Error inserting product into the 'numeroCompras' table for product ID: $productId<br>";
+                        }
+                    }
                 }
 
                 // Clear the cart after the purchase
@@ -105,7 +145,10 @@
                 if (!$resultClearCart) {
                     echo "Error al limpiar el carrito.<br>";
                 }
-                
+
+
+
+
             } else {
                 echo "<p>Error al obtener el usuario.</p>";
             }
