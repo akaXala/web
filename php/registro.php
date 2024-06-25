@@ -22,7 +22,7 @@ $base64CipherPass = base64_encode($cipherPass);
 $base64Iv = base64_encode($iv);
 
 // Update your query to insert the base64-encoded encrypted password and IV
-$query = "INSERT INTO usuarios (nombre, primerAp, segundoAp, telefono, correo, contrasena, CipherPass) VALUES ('$nombre', '$apP', '$apM', '$tel', '$email', '$base64CipherPass', '$base64Iv')";
+$query = "INSERT INTO usuarios (nombre, primerAp, segundoAp, telefono, correo, contrasena, CipherPass, creditos) VALUES ('$nombre', '$apP', '$apM', '$tel', '$email', '$base64CipherPass', '$base64Iv', '10000')";
 
 if (mysqli_query($conn, $query)) {
     echo "Registro exitoso";

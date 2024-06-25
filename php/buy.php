@@ -65,12 +65,52 @@
                 echo '<div class="alert alert-success" role="alert">';
                 echo 'Compra realizada con éxito.';
                 echo '</div>';
+
+                // Calculate the total price
+                $totalPrice = array_sum($productPrices);
+
+                // Subtract the total price from the user's "creditos"
+                $updateCreditosQuery = "UPDATE usuarios SET creditos = creditos - $totalPrice WHERE id = '$userId'";
+                $resultUpdateCreditos = mysqli_query($conn, $updateCreditosQuery);
+                if (!$resultUpdateCreditos) {
+                    echo "Error updating user's creditos.";
+                }
+
+                // Call the "orden.php" script and pass the arrays as parameters
+                $url = 'http://localhost/web/php/orden.php';
+                $data = array(
+                    'productIds' => $productIds,
+                    'productPrices' => $productPrices,
+                    'productStocks' => $productStocks
+                );
+
+                $options = array(
+                    'http' => array(
+                        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                        'method'  => 'POST',
+                        'content' => http_build_query($data)
+                    )
+                );
+
+                $context  = stream_context_create($options);
+                $result = file_get_contents($url, false, $context);
+
+                if ($result === false) {
+                    echo "Error calling the 'orden.php' script.";
+                } else {
+                    echo $result;
+                }
+
+
+
+
                 // Clear the cart after the purchase
                 $clearCartQuery = "DELETE FROM carritos WHERE idUsuario = '$userId'";
                 $resultClearCart = mysqli_query($conn, $clearCartQuery);
                 if (!$resultClearCart) {
                     echo "Error al limpiar el carrito.<br>";
                 }
+                
             } else {
                 echo "<p>Error al obtener el usuario.</p>";
             }
