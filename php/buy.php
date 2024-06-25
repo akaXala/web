@@ -81,7 +81,8 @@
                 $data = array(
                     'productIds' => $productIds,
                     'productPrices' => $productPrices,
-                    'productStocks' => $productStocks
+                    'productStocks' => $productStocks,
+                    'totalPrice' => $totalPrice
                 );
 
                 $options = array(
