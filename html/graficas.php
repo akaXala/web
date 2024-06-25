@@ -46,7 +46,17 @@ if ($result) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <!-- ICONO -->
     <link rel="icon" href="../imgs/icono.ico" type="image/x-icon">
-    <title>Más Comprados</title>
+    <title>Dashboard</title>
+    <style>
+        .graph-container {
+            width: 48%;
+            margin: auto;
+            text-align: center;
+        }
+        .graph-container button {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -68,10 +78,15 @@ if ($result) {
             </div>
         </div>
     </nav>
-    <div style="width: 75%; margin: auto;">
-        <canvas id="myChart"></canvas>
+    <div style="display: flex; justify-content: space-between; padding: 20px;">
+        <div class="graph-container">
+            <iframe src="graficas_logins.php" style="width: 100%; height: 400px; border: none;"></iframe>
+            <button class="btn btn-primary mt-2" style="background-color: rgba(75, 192, 192, 1);" onclick="window.open('graficas_logins.php', '_blank')">Ver gráfica de compras en grande</button>
+        </div>
+        <div class="graph-container">
+            <iframe src="graficas_compras.php" style="width: 100%; height: 400px; border: none;"></iframe>
+            <button class="btn btn-primary mt-2" style="background-color: rgba(255, 99, 132, 1);" onclick="window.open('graficas_compras.php', '_blank')">Ver gráfica de logins en grande</button>
+        </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="../js/graficas.js"></script>
 </body>
 </html>

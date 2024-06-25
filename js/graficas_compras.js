@@ -1,14 +1,21 @@
+// Fetch and display the top 10 most purchased products
 fetch('../php/obtenerCompras.php')
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
     .then(data => {
-        // Ordenar los productos por número de compras en orden descendente
+        if (data.error) {
+            throw new Error(data.error);
+        }
+
         data.sort((a, b) => b.compras - a.compras);
+        const top10 = data.slice(0, 10); // Muestra los 10 productos más comprados
 
-        // Seleccionar los tres productos con mayor número de compras
-        const top3 = data.slice(0, 3);
-
-        const labels = top3.map(producto => producto.titulo);
-        const compras = top3.map(producto => producto.compras);
+        const labels = top10.map(producto => producto.titulo);
+        const compras = top10.map(producto => producto.compras);
 
         const ctx = document.getElementById('myChart').getContext('2d');
         const myChart = new Chart(ctx, {
