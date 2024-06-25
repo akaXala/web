@@ -1,8 +1,8 @@
 // Función que se ejecuta cuando la página se ha cargado completamente
 window.onload = function() {
-    // Espera 5 segundos (5000 milisegundos)
+    // Espera 3 segundos (3000 milisegundos)
     setTimeout(function() {
         // Redirige a la página de destino
         window.location.href = "../html/index.php";
-    }, 5000); // 5000 milisegundos = 5 segundos
+    }, 3000); // 3000 milisegundos = 3 segundos
 };

@@ -31,6 +31,8 @@
     <title>Bienvenida</title>
     <link href="../css/bienvenida.css" rel="stylesheet">
     <script src="../js/bienvenida.js"></script>
+    <!-- ICONO -->
+    <link rel="icon" href="../imgs/icono.ico" type="image/x-icon">
 </head>
 <body>
     <div class="custom-container">

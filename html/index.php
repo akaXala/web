@@ -20,6 +20,8 @@ if (!isset($_SESSION['correo'])) {
     <link href="../css/index.css?ver=2.0" rel="stylesheet">
     <!-- JS -->
     <script src="../js/index.js"></script>
+    <!-- ICONO -->
+    <link rel="icon" href="../imgs/icono.ico" type="image/x-icon">
 </head>
 
 <body>
