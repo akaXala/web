@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const registerBtn = document.getElementById('register');
     const loginBtn = document.getElementById('login');
     const inputs = document.querySelectorAll('input');
-    const loginForm = document.querySelector('.custom-form-container.custom-sign-in form');
+    const loginForm = document.getElementById('login-form');
     const registerForm = document.querySelector('.custom-form-container.custom-sign-up form');
 
     registerBtn.addEventListener('click', () => {
@@ -84,7 +84,9 @@ document.addEventListener('DOMContentLoaded', () => {
         input.addEventListener("blur", validarFormulario);
     });
 
-    registerForm.addEventListener("submit", (e) => {
+    registerForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
         if (
             campos.correo &&
             campos.contrasena &&
@@ -93,24 +95,43 @@ document.addEventListener('DOMContentLoaded', () => {
             campos.apellido_materno &&
             campos.telefono
         ) {
-            registerForm.submit();
+            const formData = new FormData(registerForm);
+            const response = await fetch('../php/registro.php', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+
+            if (result.status === 'error') {
+                const errorField = document.querySelector(`#error-${result.field}`);
+                if (errorField) {
+                    errorField.innerText = result.message;
+                }
+            } else {
+                const userID = result.userID;
+                window.location.href = `../html/bienvenida.php?userID=${userID}`;
+            }
         } else {
-            e.preventDefault();
             alert("Por favor, rellena el formulario correctamente.");
         }
     });
 
-    loginForm.addEventListener("submit", (e) => {
-        const email = document.querySelector('input[name="txtusuario"]');
-        const pass = document.querySelector('input[name="txtpassword"]');
+    loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-        // Verificar que los campos no estén en blanco
-        if (email.value.trim() === "" || pass.value.trim() === "") {
-            e.preventDefault();
-            alert("Por favor, ingrese su correo y contraseña.");
+        const formData = new FormData(loginForm);
+        const response = await fetch('../php/login.php', {
+            method: 'POST',
+            body: formData
+        });
+        const result = await response.json();
+
+        const errorGeneral = document.getElementById('error-login-general');
+        if (result.status === 'error') {
+            errorGeneral.innerText = result.message;
         } else {
-            // Enviar el formulario si ambos campos están llenos
-            loginForm.submit();
+            errorGeneral.innerText = '';
+            window.location.href = '../html/index.php';
         }
     });
 });

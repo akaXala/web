@@ -34,14 +34,15 @@
             </form>
         </div>
         <div class="custom-form-container custom-sign-in">
-            <form method="post" action="../php/login.php">
+            <form id="login-form">
                 <h1 class="custom-heading">Inicia sesión</h1>
                 <span class="custom-span">Usa tu correo y contraseña</span>
-                <input type="email" placeholder="Email" name="txtusuario">
-                <span id="error-correo" class="custom-error-message"></span>
-                <input type="password" placeholder="Password" name="txtpassword">
-                <span id="error-contrasena" class="custom-error-message"></span>
+                <input type="email" placeholder="Email" name="txtusuario" class="form-control">
+                <span id="error-login-correo" class="custom-error-message"></span>
+                <input type="password" placeholder="Password" name="txtpassword" class="form-control">
+                <span id="error-login-contrasena" class="custom-error-message"></span>
                 <a href="#">Olvidaste tu contraseña?</a>
+                <span id="error-login-general" class="custom-error-message"></span>
                 <button type="submit">Inicia sesión</button>
             </form>
         </div>
