@@ -9,6 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- CSS -->
     <link href="../css/index.css?ver=2.0" rel="stylesheet">
+    <!-- ICONO -->
+    <link rel="icon" href="../imgs/icono.ico" type="image/x-icon">
 </head>
 
 <body>
