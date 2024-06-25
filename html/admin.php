@@ -18,7 +18,7 @@ if ($result) {
         $userId = $row['id'];
         $permiso = $row['permiso'];
         // Check if the 'permiso' value is 1 and the userId is not 1
-        if ($permiso != 1 || $userId != 1) {
+        if ($permiso != 1) {
             header("Location: index.php"); // Redirect to index.html if conditions are not met
             exit;
         }
