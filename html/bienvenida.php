@@ -29,14 +29,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenida</title>
-    <link href="../css/login.css" rel="stylesheet">
+    <link href="../css/bienvenida.css" rel="stylesheet">
+    <script src="../js/bienvenida.js"></script>
 </head>
 <body>
-    <div class="custom-container" style="padding: 20px;">
-        <h1>Bienvenido</h1>
-        <h2><?php echo htmlspecialchars($nombre); ?></h2>
-        <h3>Gracias por registrarte en nuestra página</h3>
-        <h3>Ahora ya puedes iniciar sesión</h3>
+    <div class="custom-container">
+        <h1 class="custom-h1">Bienvenido</h1>
+        <h2 class="custom-h2"><?php echo htmlspecialchars($nombre); ?></h2>
+        <h3 class="custom-h3">Gracias por registrarte en nuestra página</h3>
+        <h3 class="custom-h3">Ahora ya puedes iniciar sesión</h3>
     </div>
 </body>
 </html>
