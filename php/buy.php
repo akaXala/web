@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <!-- Custom CSS -->
     <link href="../css/index.css?ver=2.0" rel="stylesheet">
 </head>
+
 <body>
     <header>
         <marquee behavior="scroll" direction="left" class="marquee">
@@ -39,7 +41,7 @@
             if ($rowUserId = mysqli_fetch_assoc($resultUserId)) {
                 $userId = $rowUserId['id'];
                 // Modified query to join with the products table and select idProducto, price, and stock
-                $queryProducts = "SELECT c.idProducto, p.precio, p.stock FROM carritos c INNER JOIN productos p ON c.idProducto = p.id WHERE c.idUsuario = '$userId'";
+                $queryProducts = "SELECT c.idProducto, p.precio, p.stock, p.descuento FROM carritos c INNER JOIN productos p ON c.idProducto = p.id WHERE c.idUsuario = '$userId'";
                 $resultProducts = mysqli_query($conn, $queryProducts);
 
                 $productIds = [];
@@ -47,18 +49,64 @@
                 $productStocks = [];
 
                 while ($rowProduct = mysqli_fetch_assoc($resultProducts)) {
-                    $productIds[] = $rowProduct['idProducto'];
-                    $productPrices[] = $rowProduct['precio'];
-                    $productStocks[] = $rowProduct['stock'];
+                    $productIds[] = $rowProduct['idProducto']; // Store each product ID in the array
+                    $productPrices[] = $rowProduct['precio']; // Store each product price in the array
+                    $productStocks[] = $rowProduct['stock']; // Store each product stock in the array
+                    $productDiscounts[] = $rowProduct['descuento']; // Store each product discount in the array
+                }
+                // Calculate discounted prices and total price
+                $discountedPrices = [];
+                $totalPrice = 0;
+                foreach ($productPrices as $index => $price) {
+                    $discount = $productDiscounts[$index];
+                    $discountedPrice = $price - (($price * $discount) / 100);
+                    $discountedPrices[] = $discountedPrice;
+                    $totalPrice += $discountedPrice;
                 }
 
-                // Check if the product is available and reduce stock by 1
+                // Reduce stock by 1 for each product
                 foreach ($productIds as $productId) {
                     $checkStockQuery = "SELECT stock FROM productos WHERE id = '$productId' AND stock > 0";
                     $resultCheckStock = mysqli_query($conn, $checkStockQuery);
                     if (mysqli_num_rows($resultCheckStock) > 0) {
                         $updateStockQuery = "UPDATE productos SET stock = stock - 1 WHERE id = '$productId'";
                         $resultUpdateStock = mysqli_query($conn, $updateStockQuery);
+                        if ($resultUpdateStock) {
+
+                            // Subtract the total price from the user's "creditos"
+                            $updateCreditosQuery = "UPDATE usuarios SET creditos = creditos - $totalPrice WHERE id = '$userId'";
+                            $resultUpdateCreditos = mysqli_query($conn, $updateCreditosQuery);
+                            if (!$resultUpdateCreditos) {
+                                echo "Error updating user's creditos.";
+                            }
+
+                            // Call the "orden.php" script and pass the arrays as parameters
+                            $url = 'http://localhost/web/php/orden.php';
+                            $data = array(
+                                'productIds' => $productIds,
+                                'productPrices' => $productPrices,
+                                'productStocks' => $productStocks,
+                                'totalPrice' => $totalPrice,
+                                'userId' => $userId
+                            );
+
+                            $options = array(
+                                'http' => array(
+                                    'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                                    'method' => 'POST',
+                                    'content' => http_build_query($data)
+                                )
+                            );
+
+                            $context = stream_context_create($options);
+                            $result = file_get_contents($url, false, $context);
+
+                            if ($result === false) {
+                                echo "Error calling the 'orden.php' script.";
+                            } else {
+                                echo $result;
+                            }
+                        } else {
                         if (!$resultUpdateStock) {
                             echo "Error updating stock for product ID: $productId<br>";
                         }
@@ -67,8 +115,27 @@
                     }
                 }
 
-                // Calculate the total price
-                $totalPrice = array_sum($productPrices);
+                foreach ($productIds as $productId) {
+                    // Check if the product ID is already in the "numeroCompras" table
+                    $checkProductQuery = "SELECT * FROM numeroCompras WHERE idProducto = '$productId'";
+                    $resultCheckProduct = mysqli_query($conn, $checkProductQuery);
+
+                    if (mysqli_num_rows($resultCheckProduct) > 0) {
+                        // If the product ID is already in the table, increment the "compras" value by 1
+                        $updateProductQuery = "UPDATE numeroCompras SET compras = compras + 1 WHERE idProducto = '$productId'";
+                        $resultUpdateProduct = mysqli_query($conn, $updateProductQuery);
+                        if (!$resultUpdateProduct) {
+                            echo "Error updating product's number of purchases for product ID: $productId<br>";
+                        }
+                    } else {
+                        // If the product ID is not in the table, insert a new row with the product ID and set "compras" to 1
+                        $insertProductQuery = "INSERT INTO numeroCompras (idProducto, compras) VALUES ('$productId', 1)";
+                        $resultInsertProduct = mysqli_query($conn, $insertProductQuery);
+                        if (!$resultInsertProduct) {
+                            echo "Error inserting product into the 'numeroCompras' table for product ID: $productId<br>";
+                        }
+                    }
+                }
 
                 // Subtract the total price from the user's "creditos"
                 $updateCreditosQuery = "UPDATE usuarios SET creditos = creditos - $totalPrice WHERE id = '$userId'";
@@ -122,4 +189,5 @@
         </div>
     </footer>
 </body>
+
 </html>
