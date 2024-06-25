@@ -9,10 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Print the data for debugging
     echo "<h2>Orden de compra generada:</h2>";
-    echo "<p>Productos: " . implode(", ", $productIds) . "</p>
-    <p>Precios: " . implode(", ", $productPrices) . "</p>
-    <p>Existencias: " . implode(", ", $productStocks) . "</p>
-    <p>Precio total: " . $totalPrice . "</p>";
+    
 } else {
     // Handle case where the request is not a POST request
     echo "This script only handles POST requests.";
