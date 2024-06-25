@@ -33,7 +33,7 @@
         <?php
         session_start(); // Start the session
         include '../php/conexion.php'; // Include the database connection
-
+        
         if (isset($_SESSION['correo'])) {
             $email = $_SESSION['correo'];
             $queryUserId = "SELECT id FROM usuarios WHERE correo = '$email'";
@@ -47,6 +47,7 @@
                 $productIds = [];
                 $productPrices = [];
                 $productStocks = [];
+                $productDiscounts = [];
 
                 while ($rowProduct = mysqli_fetch_assoc($resultProducts)) {
                     $productIds[] = $rowProduct['idProducto']; // Store each product ID in the array
@@ -54,6 +55,7 @@
                     $productStocks[] = $rowProduct['stock']; // Store each product stock in the array
                     $productDiscounts[] = $rowProduct['descuento']; // Store each product discount in the array
                 }
+
                 // Calculate discounted prices and total price
                 $discountedPrices = [];
                 $totalPrice = 0;
@@ -64,56 +66,57 @@
                     $totalPrice += $discountedPrice;
                 }
 
-                // Reduce stock by 1 for each product
+                // Reduce stock by 1 for each product only if stock is greater than 0
                 foreach ($productIds as $productId) {
-                    $checkStockQuery = "SELECT stock FROM productos WHERE id = '$productId' AND stock > 0";
+                    $checkStockQuery = "SELECT stock FROM productos WHERE id = '$productId'";
                     $resultCheckStock = mysqli_query($conn, $checkStockQuery);
                     if (mysqli_num_rows($resultCheckStock) > 0) {
-                        $updateStockQuery = "UPDATE productos SET stock = stock - 1 WHERE id = '$productId'";
-                        $resultUpdateStock = mysqli_query($conn, $updateStockQuery);
-                        if ($resultUpdateStock) {
+                        $row = mysqli_fetch_assoc($resultCheckStock);
+                        if ($row['stock'] > 0) {
+                            $updateStockQuery = "UPDATE productos SET stock = stock - 1 WHERE id = '$productId'";
+                            $resultUpdateStock = mysqli_query($conn, $updateStockQuery);
+                            if ($resultUpdateStock) {
+                                // Subtract the total price from the user's "creditos"
+                                $updateCreditosQuery = "UPDATE usuarios SET creditos = creditos - $totalPrice WHERE id = '$userId'";
+                                $resultUpdateCreditos = mysqli_query($conn, $updateCreditosQuery);
+                                if (!$resultUpdateCreditos) {
+                                    echo "Error updating user's creditos.";
+                                }
 
-                            // Subtract the total price from the user's "creditos"
-                            $updateCreditosQuery = "UPDATE usuarios SET creditos = creditos - $totalPrice WHERE id = '$userId'";
-                            $resultUpdateCreditos = mysqli_query($conn, $updateCreditosQuery);
-                            if (!$resultUpdateCreditos) {
-                                echo "Error updating user's creditos.";
-                            }
+                                // Call the "orden.php" script and pass the arrays as parameters
+                                $url = 'http://localhost/web/php/orden.php';
+                                $data = array(
+                                    'productIds' => $productIds,
+                                    'productPrices' => $productPrices,
+                                    'productStocks' => $productStocks,
+                                    'totalPrice' => $totalPrice,
+                                    'userId' => $userId
+                                );
 
-                            // Call the "orden.php" script and pass the arrays as parameters
-                            $url = 'http://localhost/web/php/orden.php';
-                            $data = array(
-                                'productIds' => $productIds,
-                                'productPrices' => $productPrices,
-                                'productStocks' => $productStocks,
-                                'totalPrice' => $totalPrice,
-                                'userId' => $userId
-                            );
+                                $options = array(
+                                    'http' => array(
+                                        'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                                        'method' => 'POST',
+                                        'content' => http_build_query($data)
+                                    )
+                                );
 
-                            $options = array(
-                                'http' => array(
-                                    'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-                                    'method' => 'POST',
-                                    'content' => http_build_query($data)
-                                )
-                            );
+                                $context = stream_context_create($options);
+                                $result = file_get_contents($url, false, $context);
 
-                            $context = stream_context_create($options);
-                            $result = file_get_contents($url, false, $context);
-
-                            if ($result === false) {
-                                echo "Error calling the 'orden.php' script.";
-                            } else {
-                                echo $result;
+                                if ($result === false) {
+                                    echo "Error calling the 'orden.php' script.";
+                                } else {
+                                    echo $result;
+                                }
                             }
                         } else {
-                        if (!$resultUpdateStock) {
-                            echo "Error updating stock for product ID: $productId<br>";
+                            echo "Product with ID $productId is out of stock.";
+                            header("Location: ../html/out_of_stock.php");
+                            exit;
                         }
-                    
+                    }
                 }
-            }
-        }
 
                 foreach ($productIds as $productId) {
                     // Check if the product ID is already in the "numeroCompras" table
@@ -144,12 +147,12 @@
                     echo "Error updating user's creditos.";
                 }
 
-                // Insert the order into the `orden` table and get the order ID
+                // Insert the order into the orden table and get the order ID
                 $insertOrderQuery = "INSERT INTO orden (fecha, usuario_id) VALUES (NOW(), '$userId')";
                 if ($conn->query($insertOrderQuery) === TRUE) {
                     $orderId = $conn->insert_id;
 
-                    // Insert product IDs into the `orden_id_prod` table
+                    // Insert product IDs into the orden_id_prod table
                     foreach ($productIds as $productId) {
                         $insertProductQuery = "INSERT INTO orden_id_prod (id, id_prod) VALUES ($orderId, $productId)";
                         if ($conn->query($insertProductQuery) !== TRUE) {
