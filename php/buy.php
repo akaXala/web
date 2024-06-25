@@ -110,10 +110,10 @@
                         if (!$resultUpdateStock) {
                             echo "Error updating stock for product ID: $productId<br>";
                         }
-                    } else {
-                        echo "Product ID: $productId is out of stock and cannot be bought.<br>";
-                    }
+                    
                 }
+            }
+        }
 
                 foreach ($productIds as $productId) {
                     // Check if the product ID is already in the "numeroCompras" table
