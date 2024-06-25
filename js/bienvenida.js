@@ -6,3 +6,4 @@ window.onload = function() {
         window.location.href = "../html/index.php";
     }, 3000); // 3000 milisegundos = 3 segundos
 };
+
