@@ -9,13 +9,14 @@ if (!isset($_SESSION['correo'])) {
 $email = $_SESSION['correo'];
 // Perform a database query to retrieve the userId based on the email
 // Replace 'your_database_table' with the actual table name in your database
-$query = "SELECT id, permiso FROM usuarios WHERE correo = '$email'";
+$query = "SELECT id, permiso, creditos FROM usuarios WHERE correo = '$email'";
 $result = mysqli_query($conn, $query);
 
 if ($result) {
     // Check if a row is returned
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
+        $creditos = $row['creditos'];
         $userId = $row['id'];
         $permiso = $row['permiso'];
 
@@ -65,6 +66,7 @@ if ($result) {
                     <p class="mb-0">Bienvenido: <?php echo $_SESSION['correo']; ?></p>
                     <a href="../php/logout.php" class="btn btn-danger ms-2">Cerrar sesión</a>
                     <a href="mostratCarrito.php" class="btn btn-danger ms-2">Mi Carrito</a>
+                    <span>Creditos: <?php echo $creditos; ?></span>
                 </form>
             </div>
         </div>
