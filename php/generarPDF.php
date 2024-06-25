@@ -56,6 +56,7 @@ if ($result2->num_rows > 0) {
 
 // Inicializar array para los datos de los productos
 $data = [];
+$totalPriceFinal = 0;
 
 // Realizar la consulta para obtener los productos
 if (!empty($productIds)) {
@@ -66,13 +67,15 @@ if (!empty($productIds)) {
 
         if ($result3->num_rows > 0) {
             while ($row3 = $result3->fetch_assoc()) {
+                $precioFinal = $row3['precio_final'];
                 $data[] = array(
                     $row3['id'],
                     $row3['titulo'],
                     number_format($row3['precio'], 2),
                     number_format($row3['descuento'], 2),
-                    number_format($row3['precio_final'], 2)
+                    number_format($precioFinal, 2)
                 );
+                $totalPriceFinal += $precioFinal;
             }
         }
     }
@@ -239,7 +242,7 @@ class PDF extends FPDF
         $this->Cell($width, $height, $text, 0, 1, 'L', true);
     }
 
-    function AddProductsTable($header, $data)
+    function AddProductsTable($header, $data, $totalPriceFinal)
     {
         // Set font for the header
         $this->SetFont('Arial', 'B', 12);
@@ -270,6 +273,11 @@ class PDF extends FPDF
             }
             $this->Ln();
         }
+
+        // Draw the total price
+        $this->SetFont('Arial', 'B', 12);
+        $this->Cell($widths[0] + $widths[1] + $widths[2] + $widths[3], 6, 'Total:', 0, 0, 'R');
+        $this->Cell($widths[4], 6, number_format($totalPriceFinal, 2), 0, 0, 'R');
     }
 }
 
@@ -281,7 +289,7 @@ $pdf->AddPage();
 $pdf->AddOrderTicket('ORDER TICKET No. ' . $orderId);
 
 // Agregar una imagen al PDF y texto al lado de la imagen
-$pdf->AddImageWithText('../imgs/logo1.png', 10, 30, 30, 'XALA STORE S.A DE C.V', 'ESCUELA SUPERIOR DE COMPUTO', 'UNIDAD PROFESIONAL ADOLFO LOPEZ MATEOS', 'GUSTAVO A. MADERO, CIUDAD DE MEXICO C.P. 07320', 'FECHA Y HORA DE EXPEDICION: ' . $orderDate);
+$pdf->AddImageWithText('../imgs/logo1.png', 10, 30, 30, 'XALA STORE S.A DE C.V', 'ESCUELA SUPERIOR DE COMPUTO', 'UNIDAD PROFESIONAL ADOLFO LOPEZ MATEOS', 'GUSTAVO A. MADERO, CIUDAD DE MEXICO C.P. 07320', $orderDate);
 
 // Agregar el texto alineado a la izquierda debajo de la imagen
 $pdf->AddLeftAlignedText('CLIENTE');
@@ -298,9 +306,9 @@ $pdf->AddContactInfo($correo, $telefono);
 // Agregar una barra negra que diga "PRODUCTOS"
 $pdf->AddProductsHeader('PRODUCTOS');
 
-// Agregar la tabla de productos
+// Agregar la tabla de productos y el total
 $header = array('ID', 'Nombre', 'Precio', 'Descuento', 'Precio Final');
-$pdf->AddProductsTable($header, $data);
+$pdf->AddProductsTable($header, $data, $totalPriceFinal);
 
 // Output the PDF
 $pdf->Output();
