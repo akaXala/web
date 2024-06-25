@@ -28,39 +28,25 @@ if (isset($_POST['productId'])) {
         $row = mysqli_fetch_assoc($result);
         $userId = isset($row['id']) ? $row['id'] : null;
     } else {
-        echo json_encode(["error" => "Failed to retrieve userId from the database."]);
+        echo json_encode(["status" => "error", "message" => "Failed to retrieve userId from the database."]);
         exit;
     }
 
     if ($userId) {
         $query = "INSERT INTO carritos (idUsuario, idProducto) VALUES ('$userId', '$productId')";
         if (mysqli_query($conn, $query)) {
-            $response = [
+            echo json_encode([
                 "status" => "success",
                 "message" => "Product with ID $productId added to the cart.",
                 "productId" => $productId,
                 "userId" => $userId
-            ];
+            ]);
         } else {
             echo json_encode(["status" => "error", "message" => "Failed to add product to the cart."]);
-            exit;
         }
-    
-    $query = "INSERT INTO carritos (idUsuario, idProducto) VALUES ('$userId', '$productId')";
-    if (mysqli_query($conn, $query)) {
-        $response = [
-            "message" => "Product with ID $productId added to the cart.",
-            "productId" => $productId
-        ];
+        exit; // Ensure the script stops after handling the request
     } else {
         echo json_encode(["status" => "error", "message" => "User not found."]);
         exit;
     }
-
-    // Encode and return the response as JSON
-    echo json_encode($response);
-} else {
-    // Handle the case when productId is not received
-    echo json_encode(["status" => "error", "message" => "No productId received from detallesProducto."]);
 }
-?>

@@ -34,7 +34,7 @@ if (mysqli_num_rows($result) > 0) {
     }
 } else {
     // Si no existen, procede con la inserción
-    $query = "INSERT INTO usuarios (nombre, primerAp, segundoAp, telefono, correo, contrasena, CipherPass) VALUES ('$nombre', '$apP', '$apM', '$tel', '$email', '$base64CipherPass', '$base64Iv')";
+    $query = "INSERT INTO usuarios (nombre, primerAp, segundoAp, telefono, correo, contrasena, CipherPass, creditos) VALUES ('$nombre', '$apP', '$apM', '$tel', '$email', '$base64CipherPass', '$base64Iv', '10000')";
     if (mysqli_query($conn, $query)) {
         $userID = mysqli_insert_id($conn);
         echo json_encode(array("status" => "success", "userID" => $userID, "message" => "Registro exitoso."));
