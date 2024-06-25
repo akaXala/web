@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +9,6 @@
     <!-- Custom CSS -->
     <link href="../css/index.css?ver=2.0" rel="stylesheet">
 </head>
-
 <body>
     <header>
         <marquee behavior="scroll" direction="left" class="marquee">
@@ -25,14 +23,12 @@
                 La tienda
             </a>
             <div class="ms-auto">
-                <form class="container-fluid justify-content-start">
-                </form>
+                <form class="container-fluid justify-content-start"></form>
             </div>
         </div>
     </nav>
     <main class="container mt-5">
         <?php
-        // Start of the PHP code
         session_start(); // Start the session
         include '../php/conexion.php'; // Include the database connection
         
@@ -82,6 +78,16 @@
                                 'productStocks' => $productStocks,
                                 'totalPrice' => $totalPrice
                             );
+
+                // Call the "orden.php" script and pass the arrays as parameters
+                $url = 'http://localhost/web/php/orden.php';
+                $data = array(
+                    'productIds' => $productIds,
+                    'productPrices' => $productPrices,
+                    'productStocks' => $productStocks,
+                    'totalPrice' => $totalPrice,
+                    'userId' => $userId
+                );
 
                             $options = array(
                                 'http' => array(
@@ -133,7 +139,6 @@
                     }
                 }
 
-
                 // Clear the cart after the purchase
                 $clearCartQuery = "DELETE FROM carritos WHERE idUsuario = '$userId'";
                 $resultClearCart = mysqli_query($conn, $clearCartQuery);
@@ -162,5 +167,4 @@
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
