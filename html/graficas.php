@@ -37,25 +37,32 @@ if ($result) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
-    <!-- JQuery -->
-    <script src="../js/jquery-3.7.1.min.js"></script>
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <!-- CSS -->
-    <link href="../css/index.css?ver=2.0" rel="stylesheet">
     <!-- ICONO -->
     <link rel="icon" href="../imgs/icono.ico" type="image/x-icon">
+    <title>Dashboard</title>
+    <style>
+        .graph-container {
+            width: 48%;
+            margin: auto;
+            text-align: center;
+        }
+        .graph-container button {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <header>
         <marquee behavior="scroll" direction="left" class="marquee">
-            <span class="marquee-text" style="margin-right: 800px;">Bienvenido al Panel de Administración</span>
+            <span class="marquee-text" style="margin-right: 800px;">Bienvenido a la tienda en línea</span>
+            <span class="marquee-text">Encuentra las mejores ofertas</span>
         </marquee>
     </header>
     <nav class="navbar bg-body-tertiary">
@@ -71,14 +78,15 @@ if ($result) {
             </div>
         </div>
     </nav>
-    <main class="text-center mt-5">
-        <div class="container">
-            <a href="PDF.php" class="btn btn-primary">Historial de Compras</a>
-            <a href="graficas.php" class="btn btn-secondary">Ver Gráficos</a>
+    <div style="display: flex; justify-content: space-between; padding: 20px;">
+        <div class="graph-container">
+            <iframe src="graficas_logins.php" style="width: 100%; height: 400px; border: none;"></iframe>
+            <button class="btn btn-primary mt-2" style="background-color: rgba(75, 192, 192, 1);" onclick="window.open('graficas_logins.php', '_blank')">Ver gráfica de compras en grande</button>
         </div>
-    </main>
-    <footer>
-        <p class="pie">Pendejos S.A de C.V</p>
-    </footer>
+        <div class="graph-container">
+            <iframe src="graficas_compras.php" style="width: 100%; height: 400px; border: none;"></iframe>
+            <button class="btn btn-primary mt-2" style="background-color: rgba(255, 99, 132, 1);" onclick="window.open('graficas_compras.php', '_blank')">Ver gráfica de logins en grande</button>
+        </div>
+    </div>
 </body>
 </html>

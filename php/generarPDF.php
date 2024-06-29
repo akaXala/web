@@ -24,18 +24,7 @@ if ($resultProductIds->num_rows > 0) {
     die("No se encontraron productos para la orden.");
 }
 
-// Obtener la fecha de la orden
-$queryOrderDate = "SELECT fecha FROM orden WHERE id = $orderId";
-$resultOrderDate = $conn->query($queryOrderDate);
-
-if ($resultOrderDate->num_rows > 0) {
-    $rowOrderDate = $resultOrderDate->fetch_assoc();
-    $orderDate = $rowOrderDate['fecha'];
-} else {
-    $orderDate = 'Fecha no encontrada';
-}
-
-// Realizar la consulta para el texto debajo de "CLIENTE"
+// Realizar la consulta para obtener los detalles del cliente
 $query2 = "SELECT nombre, primerAp, segundoAp, correo, telefono FROM usuarios WHERE id = $userId";
 $result2 = $conn->query($query2);
 
@@ -54,6 +43,17 @@ if ($result2->num_rows > 0) {
     $telefono = 'Teléfono no encontrado';
 }
 
+// Realizar la consulta para obtener la fecha de la orden
+$queryDate = "SELECT fecha FROM orden WHERE id = $orderId";
+$resultDate = $conn->query($queryDate);
+
+if ($resultDate->num_rows > 0) {
+    $rowDate = $resultDate->fetch_assoc();
+    $orderDate = $rowDate['fecha'];
+} else {
+    $orderDate = 'Fecha no encontrada';
+}
+
 // Inicializar array para los datos de los productos
 $data = [];
 
@@ -61,7 +61,7 @@ $data = [];
 if (!empty($productIds)) {
     foreach ($productIds as $id) {
         $id = intval($id); // Asegurarse de que el ID es un número entero
-        $query3 = "SELECT id, titulo, precio, descuento, (precio - descuento) AS precio_final FROM productos WHERE id = $id";
+        $query3 = "SELECT id, titulo, precio, (precio*(descuento/100)) AS descuento_final, (precio - ((precio*descuento)/100)) AS precio_final FROM productos WHERE id = $id";
         $result3 = $conn->query($query3);
 
         if ($result3->num_rows > 0) {
@@ -70,13 +70,16 @@ if (!empty($productIds)) {
                     $row3['id'],
                     $row3['titulo'],
                     number_format($row3['precio'], 2),
-                    number_format($row3['descuento'], 2),
+                    number_format($row3['descuento_final'], 2),
                     number_format($row3['precio_final'], 2)
                 );
             }
         }
     }
 }
+
+// Calcular el total de la compra
+$totalCompra = array_sum(array_column($data, 4));
 
 class PDF extends FPDF
 {
@@ -146,12 +149,17 @@ class PDF extends FPDF
         $this->SetXY($textX, $subtext3Y);
         $this->Cell(0, 6, $subtext3); // Reduce the height for closer spacing
 
-        // Set position for the date text
+        // Set position for the date
         $dateY = $subtext3Y + 6; // Position below the third subtext
+        
+        // Set font for the date
+        $this->SetFont('Arial', '', 12);
+        // Set text color to black
+        $this->SetTextColor(0, 0, 0);
         
         // Set position and add the date
         $this->SetXY($textX, $dateY);
-        $this->Cell(0, 6, $date); // Add the date
+        $this->Cell(0, 6, $date); // Reduce the height for closer spacing
     }
 
     function AddLeftAlignedText($text)
@@ -271,6 +279,22 @@ class PDF extends FPDF
             $this->Ln();
         }
     }
+
+    function AddTotalAmount($total)
+    {
+        // Set font for the total amount
+        $this->SetFont('Arial', 'B', 12);
+        // Set text color for the total amount
+        $this->SetTextColor(0, 0, 0);
+
+        // Calculate position for the total amount
+        $x = 10; // Position to the left with some margin
+        $y = $this->GetY() + 10; // Spacing below the table
+
+        // Set position and add the total amount
+        $this->SetXY($x, $y);
+        $this->Cell(0, 10, "Total de la compra: $" . number_format($total, 2), 0, 1, 'R', false);
+    }
 }
 
 // Create instance of the PDF class
@@ -281,7 +305,7 @@ $pdf->AddPage();
 $pdf->AddOrderTicket('ORDER TICKET No. ' . $orderId);
 
 // Agregar una imagen al PDF y texto al lado de la imagen
-$pdf->AddImageWithText('../imgs/logo1.png', 10, 30, 30, 'XALA STORE S.A DE C.V', 'ESCUELA SUPERIOR DE COMPUTO', 'UNIDAD PROFESIONAL ADOLFO LOPEZ MATEOS', 'GUSTAVO A. MADERO, CIUDAD DE MEXICO C.P. 07320', 'FECHA Y HORA DE EXPEDICION: ' . $orderDate);
+$pdf->AddImageWithText('../imgs/logo1.png', 10, 30, 30, 'XALA STORE S.A DE C.V', 'ESCUELA SUPERIOR DE COMPUTO', 'UNIDAD PROFESIONAL ADOLFO LOPEZ MATEOS', 'GUSTAVO A. MADERO, CIUDAD DE MEXICO C.P. 07320', $orderDate);
 
 // Agregar el texto alineado a la izquierda debajo de la imagen
 $pdf->AddLeftAlignedText('CLIENTE');
@@ -301,6 +325,9 @@ $pdf->AddProductsHeader('PRODUCTOS');
 // Agregar la tabla de productos
 $header = array('ID', 'Nombre', 'Precio', 'Descuento', 'Precio Final');
 $pdf->AddProductsTable($header, $data);
+
+// Agregar el total de la compra
+$pdf->AddTotalAmount($totalCompra);
 
 // Output the PDF
 $pdf->Output();

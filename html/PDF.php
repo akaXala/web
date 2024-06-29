@@ -34,14 +34,17 @@ if ($result) {
     header("Location: login.html");
     exit;
 }
-?>
 
+// Query to get the order history
+$queryOrders = "SELECT id, fecha, usuario_id FROM orden";
+$resultOrders = mysqli_query($conn, $queryOrders);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
     <!-- JQuery -->
     <script src="../js/jquery-3.7.1.min.js"></script>
     <!-- Bootstrap -->
@@ -51,11 +54,13 @@ if ($result) {
     <link href="../css/index.css?ver=2.0" rel="stylesheet">
     <!-- ICONO -->
     <link rel="icon" href="../imgs/icono.ico" type="image/x-icon">
+    <title>Historial de compras</title>
 </head>
 <body>
     <header>
         <marquee behavior="scroll" direction="left" class="marquee">
-            <span class="marquee-text" style="margin-right: 800px;">Bienvenido al Panel de Administración</span>
+            <span class="marquee-text" style="margin-right: 800px;">Bienvenido a la tienda en línea</span>
+            <span class="marquee-text">Encuentra las mejores ofertas</span>
         </marquee>
     </header>
     <nav class="navbar bg-body-tertiary">
@@ -71,14 +76,34 @@ if ($result) {
             </div>
         </div>
     </nav>
-    <main class="text-center mt-5">
-        <div class="container">
-            <a href="PDF.php" class="btn btn-primary">Historial de Compras</a>
-            <a href="graficas.php" class="btn btn-secondary">Ver Gráficos</a>
-        </div>
-    </main>
-    <footer>
-        <p class="pie">Pendejos S.A de C.V</p>
-    </footer>
+    <div class="container mt-4">
+        <h2>Historial de compras</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID de la Orden</th>
+                    <th>Fecha</th>
+                    <th>ID de Usuario</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if ($resultOrders) {
+                    while ($order = mysqli_fetch_assoc($resultOrders)) {
+                        echo "<tr>";
+                        echo "<td>{$order['id']}</td>";
+                        echo "<td>{$order['fecha']}</td>";
+                        echo "<td>{$order['usuario_id']}</td>";
+                        echo "<td><a href='../php/generarPDF.php?orderId={$order['id']}&userId={$order['usuario_id']}' class='btn btn-primary' target='_blank'>Ver PDF</a></td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='4'>No se encontraron órdenes de compra.</td></tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

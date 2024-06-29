@@ -48,17 +48,15 @@ $stmt->close();
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <link href="../css/detallesProducto.css" rel="stylesheet">
-    <!-- ICONO -->
-    <link rel="icon" href="../imgs/icono.ico" type="image/x-icon">
     <!-- CSS -->
     <link href="../css/index.css?ver=2.0" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- JS -->
-    
+    <script src="../js/index.js"></script>
     <script src="../js/components.js"></script>
+    <script src="../js/allProducts.js"></script>
 </head>
 
 <body>
@@ -70,8 +68,8 @@ $stmt->close();
                     class="d-inline-block align-middle">XalaStore
             </a>
             <!-- Barra de busqueda -->
-            <form class="d-flex flex-grow-1 w-25" role="search" action="./allProducts.php" method="get">
-                <input id="productSearch" class="form-control" name="productSearch" type="search" placeholder="Search">
+            <form class="d-flex flex-grow-1 w-25" role="search" method="get">
+                <input id="productSearch" class="form-control" type="search" placeholder="Search">
                 <button class="btn position-relative pe-1" type="submit">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
@@ -125,18 +123,12 @@ $stmt->close();
             </button>
         </div>
     </nav>
-            <!-- boton retraible -->
-            <button class="navbar-toggler flex-grow-0 px-0 py-0" type="button" data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <section>
+        <div id="products-container">
         </div>
-    </nav>>
-    <main class="container mt-5">
-        <div id="product-details"></div>
-        <a href="./index.php"><div id="AddCar"></div></a> <!-- Contenedor para el botón Add to Cart -->
-    </main>
+    </section>
+
     <footer-js></footer-js>
-    <script src="../js/detallesProducto.js"></script>
 </body>
+
 </html>
