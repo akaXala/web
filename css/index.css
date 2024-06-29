@@ -10,3 +10,38 @@
 body header .marquee .marquee-text {
     color: grey; /* Replace #yourColor with your desired color */
 }
+/* Estilos personalizados para el botón toggler */
+.custom-toggler .navbar-toggler {
+    border: none;
+    background-color: transparent;
+  }
+
+  /*  Estilos para el body*/
+  body {
+    background-color: white;
+    padding-top: 66px;
+  }
+
+  /*Estilos para el carrusel de ofertas*/
+  .c-item {
+    height: 625px;
+  }
+
+  .c-img {
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-details {
+    color: black;
+  }
+
+  .discount {
+    font-size: 4.3rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .description {
+    font-size: 1.1em;
+  }
