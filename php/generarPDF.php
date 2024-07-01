@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ERROR | E_PARSE);
 require('../fpdf/fpdf.php');
 require('./conexion.php');
 
@@ -24,7 +25,8 @@ if ($resultProductIds->num_rows > 0) {
     die("No se encontraron productos para la orden.");
 }
 
-// Contar las cantidades de cada producto
+// Filtrar IDs no numéricos y contar las cantidades de cada producto
+$productIds = array_filter($productIds, 'is_numeric');
 $productCounts = array_count_values($productIds);
 
 // Realizar la consulta para obtener los detalles del cliente
@@ -67,13 +69,16 @@ foreach ($productCounts as $productId => $quantity) {
 
     if ($result3->num_rows > 0) {
         while ($row3 = $result3->fetch_assoc()) {
+            $precioUnitario = round(floatval($row3['precio_final']), 2);
+            $precioTotal = $quantity * $precioUnitario;
             $data[] = array(
                 $row3['id'],
                 $row3['titulo'],
                 $quantity, // Añadir la cantidad comprada
-                number_format(floatval($row3['precio']), 2), // Convertir a float y formatear
-                number_format(floatval($row3['descuento_final']), 2), // Convertir a float y formatear
-                number_format(floatval($row3['precio_final']), 2) // Convertir a float y formatear
+                round(floatval($row3['precio']), 2), // Precio Unitario
+                round(floatval($row3['descuento_final']), 2), // Descuento final
+                $precioUnitario, // Precio Final
+                round($precioTotal, 2) // Precio Total
             );
         }
     }
@@ -81,7 +86,7 @@ foreach ($productCounts as $productId => $quantity) {
 
 // Calcular el total de la compra
 $totalCompra = array_sum(array_map(function($item) {
-    return $item[2] * $item[5]; // cantidad * precio final
+    return floatval($item[2]) * floatval($item[5]); // cantidad * precio final
 }, $data));
 
 class PDF extends FPDF
@@ -258,7 +263,7 @@ class PDF extends FPDF
         $this->SetTextColor(0, 0, 0);
 
         // Calculate width for each column with additional spacing
-        $widths = array(30, 80, 20, 30, 30, 40); // Ajustar los anchos de las columnas con espaciado
+        $widths = array(20, 80, 20, 40, 30, 30, 30); // Ajustar los anchos de las columnas con espaciado
         $x = 10; // Position to the left with some margin
         $y = $this->GetY() + 5; // Spacing below the header
 
@@ -276,7 +281,7 @@ class PDF extends FPDF
         $this->SetTextColor(0, 0, 0);
         foreach ($data as $row) {
             foreach ($row as $key => $col) {
-                $align = in_array($key, [0, 2, 3, 4, 5]) ? 'R' : 'L'; // Alinear a la derecha ID, cantidad, precio, descuento y precio final
+                $align = in_array($key, [0, 2, 3, 4, 5, 6]) ? 'C' : 'L'; // Alinear a la derecha ID, cantidad, precio unitario, descuento, precio final y precio total
                 $this->Cell($widths[$key], 6, $col, 0, 0, $align);
             }
             $this->Ln();
@@ -326,7 +331,7 @@ $pdf->AddContactInfo($correo, $telefono);
 $pdf->AddProductsHeader('PRODUCTOS');
 
 // Agregar la tabla de productos
-$header = array('ID', 'Nombre', 'Cantidad', 'Precio', 'Descuento', 'Precio Final');
+$header = array('ID', 'Nombre', 'Cantidad', 'Precio Unitario', 'Descuento', 'Precio Final', 'Precio Total');
 $pdf->AddProductsTable($header, $data);
 
 // Agregar el total de la compra

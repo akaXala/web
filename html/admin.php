@@ -163,10 +163,6 @@ if ($result) {
         </div>
     </div>
 
-    <footer>
-        <p class="pie">Footer</p>
-    </footer>
-
     <script>
         function showModal(modalId, url) {
             document.getElementById(modalId).querySelector('iframe').src = url;
