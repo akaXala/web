@@ -7,7 +7,7 @@ header('Content-Type: application/json');
 ob_start();
 
 // Consulta a la tabla numerocompras
-$sql = "SELECT idProducto, compras FROM numerocompras ORDER BY compras DESC LIMIT 10";
+$sql = "SELECT idProducto, compras FROM numerocompras ORDER BY compras DESC";
 $result = $conn->query($sql);
 
 $productos = [];

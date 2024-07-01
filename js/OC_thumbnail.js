@@ -1,4 +1,4 @@
-// Fetch and display the top 10 most purchased products
+// Fetch and display the top 3 most purchased products
 fetch('../php/obtenerCompras.php')
     .then(response => {
         if (!response.ok) {
@@ -12,12 +12,10 @@ fetch('../php/obtenerCompras.php')
         }
 
         data.sort((a, b) => b.compras - a.compras);
-        const top10 = data.slice(0, 10); // Muestra los 10 productos más comprados
-        const labels = top10.map(producto => producto.titulo);
-        const compras = top10.map(producto => producto.compras);
+        const top3 = data.slice(0, 3); // Muestra los 3 productos más comprados
 
-        console.log('Labels:', labels); // Verifica las etiquetas
-        console.log('Compras:', compras); // Verifica los datos de compras
+        const labels = top3.map(producto => producto.titulo);
+        const compras = top3.map(producto => producto.compras);
 
         const ctx = document.getElementById('myChart').getContext('2d');
         const myChart = new Chart(ctx, {

@@ -35,33 +35,17 @@ if ($result) {
     exit;
 }
 
-// Pagination logic
-$limit = 15; // Number of results per page
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$start = ($page - 1) * $limit;
-
-// Query to get the order history with pagination
-$queryOrders = "SELECT orden.id, orden.fecha, orden.usuario_id, usuarios.nombre, usuarios.primerAp
-FROM orden
-INNER JOIN usuarios ON orden.usuario_id = usuarios.id
-LIMIT $start, $limit";
-$resultOrders = mysqli_query($conn, $queryOrders);
-
-// Get total records
-$queryTotal = "SELECT COUNT(*) AS total FROM orden INNER JOIN usuarios ON orden.usuario_id = usuarios.id";
-$resultTotal = mysqli_query($conn, $queryTotal);
-$total = mysqli_fetch_assoc($resultTotal)['total'];
-$totalPages = ceil($total / $limit);
+$queryProductos = "SELECT id, titulo, precio, descuento, stock, miniatura FROM productos";
+$resultProductos = mysqli_query($conn, $queryProductos);
 
 // Array to store the query results
-$orderData = [];
+$productData = [];
 
-if ($resultOrders) {
-    while ($order = mysqli_fetch_assoc($resultOrders)) {
-        $orderData[] = $order;
+if ($resultProductos) {
+    while ($product = mysqli_fetch_assoc($resultProductos)) {
+        $productData[] = $product;
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -76,7 +60,7 @@ if ($resultOrders) {
     <link href="../css/index.css?ver=2.0" rel="stylesheet">
     <!-- ICONO -->
     <link rel="icon" href="../imgs/icono.ico" type="image/x-icon">
-    <title>Historial de compras</title>
+    <title>Administrar Productos</title>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-light py-2 fixed-top custom-toggler">
@@ -115,60 +99,52 @@ if ($resultOrders) {
         </div>
     </nav>
     <div class="container mt-4">
-        <h2 class="text-center">Shopping history</h2>
-        <!-- Filtrado y ordenación -->
+        <h2 class="text-center">Store products</h2>
+        <!-- Búsqueda y Ordenación -->
         <div class="row mb-3">
             <div class="col-md-4">
-                <label for="filterMonth" class="form-label">Filtrar por Mes:</label>
-                <input type="month" id="filterMonth" class="form-control">
+                <input type="text" id="searchInput" class="form-control" placeholder="Search by Title">
             </div>
             <div class="col-md-4">
-                <label for="sortOrder" class="form-label">Ordenar por Fecha:</label>
                 <select id="sortOrder" class="form-select">
-                    <option value="asc">Ascendente</option>
-                    <option value="desc">Descendente</option>
+                    <option value="id_asc">Ascending ID</option>
+                    <option value="id_desc">Descending ID</option>
+                    <option value="price_asc">Ascending Price</option>
+                    <option value="price_desc">Descending Price</option>
+                    <option value="stock_asc">Ascending Stock</option>
+                    <option value="stock_desc">Descending Stock</option>
                 </select>
             </div>
-            <div class="col-md-4 d-flex align-items-end">
-                <button id="applyFilters" class="btn btn-primary w-100">Aplicar Filtros</button>
+            <div class="col-md-4">
+                <button id="applyFilters" class="btn btn-primary w-100">Apply Filters</button>
             </div>
         </div>
 
         <div class="table-responsive">
-            <table class="table table-striped table-hover">
-                <caption>Lista de PDF</caption>
+            <table class="table table-striped table-hover table-sm">
+                <caption>Lista de Productos</caption>
                 <thead>
                     <tr>
-                        <th>ID Orden</th>
-                        <th>Fecha</th>
-                        <th>ID Usuario</th>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>PDF</th>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Price</th>
+                        <th>Discount</th>
+                        <th>Stock</th>
+                        <th>Thumbnail</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id="orderTableBody" class="table-group-divider">
+                <tbody id="productTableBody" class="table-group-divider">
                     <!-- Las filas de la tabla se llenarán dinámicamente con JavaScript -->
                 </tbody>
             </table>
         </div>
-
-        <!-- Paginación -->
-        <nav aria-label="Page navigation">
-            <ul class="pagination">
-                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                    <li class="page-item <?php if ($i == $page) echo 'active'; ?>">
-                        <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                    </li>
-                <?php endfor; ?>
-            </ul>
-        </nav>
     </div>
 
     <script>
         // Pasar los datos de PHP a JavaScript
-        const orderData = <?php echo json_encode($orderData); ?>;
+        const productData = <?php echo json_encode($productData); ?>;
     </script>
-    <script src="../js/ordenarPDF.js"></script>
+    <script src="../js/mostrarProductos.js"></script>
 </body>
 </html>

@@ -48,11 +48,26 @@ if ($result) {
     <link rel="icon" href="../imgs/icono.ico" type="image/x-icon">
     <title>Más Comprados</title>
 </head>
+<nav class="navbar navbar-expand-lg bg-body-tertiary navbar-light py-2 fixed-top custom-toggler">
+        <div class="container">
+            <!-- LOGO y Texto -->
+            <a class="navbar-brand flex-grow-0 me-1" href="#">
+                <img src="../imgs/logo1.png" alt="Logo" width="40" height="40" class="d-inline-block align-middle">XS - Admin
+            </a>
+            <!-- login -->
+            <form class="flex-grow-0">
+                <a href="../php/logout.php" class="btn btn-danger ms-2">Cerrar sesión</a>
+            </form>
+        </div>
+    </nav>
 <body>
-    <div style="width: 75%; margin: auto;">
+    <div style="width: 75%; margin: auto; padding-top: 80px;">
         <canvas id="myChart"></canvas>
     </div>
+    <div class="d-flex justify-content-center mt-3">
+        <button type="button" class="btn btn-secondary" onclick="window.close()">Regresar</button>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="../js/graficas_compras.js"></script>
+    <script src="../js/OL_datosCompletos.js"></script>
 </body>
 </html>
