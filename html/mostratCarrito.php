@@ -50,17 +50,41 @@ if (isset($_SESSION['correo'])) {
         $resultCart = mysqli_query($conn, $queryCart);
         if (mysqli_num_rows($resultCart) > 0) {
             $totalPrice = 0; // Initialize total price
-            echo '<table class="table">';
-            echo '<thead><tr><th>Producto</th><th>Precio</th><th>Thumbnail</th><th>Acciones</th></tr></thead>';
-            echo '<tbody>';
+            $products = []; // Initialize products array
+            
             while ($rowCart = mysqli_fetch_assoc($resultCart)) {
                 $discountedPrice = $rowCart['precio'] - (($rowCart['precio'] * ($rowCart['descuento'])) / 100);
-                echo "<tr><td>{$rowCart['titulo']}</td><td>{$discountedPrice}</td><td><img src='{$rowCart['miniatura']}' width='50' height='50'></td><td><a href='../php/deleteFromCart.php?idProducto={$rowCart['idProducto']}' class='btn btn-danger'>Eliminar</a></td></tr>";
+                $productId = $rowCart['idProducto'];
+                
+                // Check if product is already in the array
+                if (isset($products[$productId])) {
+                    $products[$productId]['price'] += $discountedPrice;
+                    $products[$productId]['quantity'] += 1;
+                } else {
+                    $products[$productId] = [
+                        'title' => $rowCart['titulo'],
+                        'price' => $discountedPrice,
+                        'thumbnail' => $rowCart['miniatura'],
+                        'quantity' => 1
+                    ];
+                }
                 $totalPrice += $discountedPrice; // Add discounted item price to total
             }
+
+            echo '<table class="table">';
+            echo '<thead><tr><th>Producto</th><th>Precio</th><th>Thumbnail</th><th>Cantidad</th><th>Acciones</th></tr></thead>';
+            echo '<tbody>';
+
+            // Display products
+            foreach ($products as $productId => $product) {
+                $formattedPrice = number_format($product['price'], 2);
+                echo "<tr><td>{$product['title']}</td><td>\${$formattedPrice}</td><td><img src='{$product['thumbnail']}' width='50' height='50'></td><td>{$product['quantity']}</td><td><a href='../php/deleteFromCart.php?idProducto={$productId}' class='btn btn-danger'>Eliminar</a></td></tr>";
+            }
+
+            $formattedTotalPrice = number_format($totalPrice, 2);
             echo '</tbody></table>';
             // Display total price
-            echo "<div style='text-align: center; padding: 20px;'><strong>Total: $$totalPrice</strong></div>";
+            echo "<div style='text-align: center; padding: 20px;'><strong>Total: \${$formattedTotalPrice}</strong></div>";
             echo "<div style='text-align: center; padding: 20px;'><a href='../php/buy.php' class='btn btn-success' style='padding: 10px 20px; font-size: 16px;'>Buy</a></div>";
 
         } else {
