@@ -11,15 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch((error) => console.error("Error loading JSON:", error));
 
-  // Event listener for the search input
-  document
-    .getElementById("productSearch")
-    .addEventListener("input", (event) => {
-      const searchTerm = event.target.value.toLowerCase();
-      console.log(`Buscando: ${searchTerm}`); // Debug: Log the search term
-      displayProducts(products, searchTerm); // Filter and display products
-    });
-
   window.addEventListener("resize", () => {
     displayTopRatedProducts(products);
   });
@@ -75,27 +66,23 @@ function displayProducts(products, filter = "") {
         100 / itemsPerSlide
       }%;">
         <div class="card" style="width: 13rem; min-height: 450px;">
-          <img src="${
-            product.thumbnail
-          }" class="card-img-top" style="height: 200px; object-fit: cover;" alt="${
-      product.title
-    }">
+          <img src="${product.thumbnail}" >
           <div class="card-body d-flex flex-column">
             <h5 class="card-title d-flex justify-content-start" style="min-height: 3em;">${
               product.title
             }</h5>
-            <p class="card-text d-flex justify-content-start text-decoration-line-through fw-light">$ ${
+            <p class="card-text d-flex mb-0 justify-content-start text-decoration-line-through fw-light">$ ${
               product.price
             }</p>
-            <div class="">
-              <p class="d-flex justify-content-between card-text">$ ${newPrice} <p class="card-text">% ${
-      product.discountPercentage
-    }</p></p>
-              
+            <div class="d-flex justify-content-between my-0 py-0">
+              <p class="card-text" style="font-size:30px;font-weight:bold">$${newPrice}</p>
+              <p class="card-text" style="font-size:15px;color:#0b5ed7">${
+                product.discountPercentage
+              }%<br>OFF</p>
             </div>
             <a href="${address}?id=${
       product.id
-    }" class="btn btn-primary mt-auto">Ver</a>
+    }" class="btn btn-primary my-auto">View</a>
           </div>
         </div>
       </div>`;
