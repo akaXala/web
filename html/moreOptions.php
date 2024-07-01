@@ -211,7 +211,35 @@ if ($resultAdmins) {
             </div>
             <div class="tab-pane fade" id="option3" role="tabpanel" aria-labelledby="option3-tab">
                 <h3>XalaStore creator credits</h3>
-                <p>This is the content for option 3.</p>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <img src="../imgs/jeff.jpg" class="card-img-top" alt="Imagen de Persona 1">
+                            <div class="card-body">
+                                <h5 class="card-title">Jeffrey Alcalá</h5>
+                                <p class="card-text">"Trabaje duro durante todo el semestre"</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <img src="../imgs/xala.jpg" class="card-img-top" alt="Imagen de Persona 2">
+                            <div class="card-body">
+                                <h5 class="card-title">Arath Xala</h5>
+                                <p class="card-text">"Si se pudo hacer todo en 3 días"</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <img src="../imgs/torres.jpg" class="card-img-top" alt="Imagen de Persona 3">
+                            <div class="card-body">
+                                <h5 class="card-title">Emiliano Torres</h5>
+                                <p class="card-text">"Confirmo"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
