@@ -94,7 +94,7 @@
                                 echo '<div class="alert alert-success" role="alert">Compra realizada con éxito.</div>';
                                 echo '<div style="text-align: center; padding: 20px;">';
                                 echo '<a href="../html/index.php" class="btn btn-primary" style="padding: 10px 20px; font-size: 16px;">Regresar al inicio</a>';
-                                echo "<a href='../php/generarPDF.php?orderId=$orderId&userId=$userId' class='btn btn-success ms-2' style='padding: 10px 20px; font-size: 16px;'>Ver Factura</a>";
+                                echo "<a href='../php/generarPDF.php?orderId=$orderId&userId=$userId' class='btn btn-success ms-2' target='_blank' style='padding: 10px 20px; font-size: 16px;'>Ver Factura</a>";
                                 echo '</div>';
                             } else {
                                 $conn->rollback(); // Rollback transaction

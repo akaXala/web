@@ -24,6 +24,9 @@ if ($resultProductIds->num_rows > 0) {
     die("No se encontraron productos para la orden.");
 }
 
+// Contar las cantidades de cada producto
+$productCounts = array_count_values($productIds);
+
 // Realizar la consulta para obtener los detalles del cliente
 $query2 = "SELECT nombre, primerAp, segundoAp, correo, telefono FROM usuarios WHERE id = $userId";
 $result2 = $conn->query($query2);
@@ -58,36 +61,28 @@ if ($resultDate->num_rows > 0) {
 $data = [];
 
 // Realizar la consulta para obtener los productos
-if (!empty($productIds)) {
-    foreach ($productIds as $id) {
-        $id = intval($id); // Asegurarse de que el ID es un número entero
-        $query3 = "SELECT id, titulo, precio, (precio*(descuento/100)) AS descuento_final, (precio - ((precio*descuento)/100)) AS precio_final FROM productos WHERE id = $id";
-        $result3 = $conn->query($query3);
+foreach ($productCounts as $productId => $quantity) {
+    $query3 = "SELECT id, titulo, precio, (precio*(descuento/100)) AS descuento_final, (precio - ((precio*descuento)/100)) AS precio_final FROM productos WHERE id = $productId";
+    $result3 = $conn->query($query3);
 
-        if ($result3->num_rows > 0) {
-            while ($row3 = $result3->fetch_assoc()) {
-                $data[] = array(
-                    $row3['id'],
-                    $row3['titulo'],
-                    floatval($row3['precio']), // Convertir a float
-                    floatval($row3['descuento_final']), // Convertir a float
-                    floatval($row3['precio_final']) // Convertir a float
-                );
-            }
+    if ($result3->num_rows > 0) {
+        while ($row3 = $result3->fetch_assoc()) {
+            $data[] = array(
+                $row3['id'],
+                $row3['titulo'],
+                $quantity, // Añadir la cantidad comprada
+                number_format(floatval($row3['precio']), 2), // Convertir a float y formatear
+                number_format(floatval($row3['descuento_final']), 2), // Convertir a float y formatear
+                number_format(floatval($row3['precio_final']), 2) // Convertir a float y formatear
+            );
         }
     }
 }
 
 // Calcular el total de la compra
-$totalCompra = array_sum(array_column($data, 4));
-
-// Formatear los valores para mostrarlos en el PDF
-foreach ($data as &$row) {
-    $row[2] = number_format($row[2], 2); // Formatear precio
-    $row[3] = number_format($row[3], 2); // Formatear descuento
-    $row[4] = number_format($row[4], 2); // Formatear precio final
-}
-unset($row);
+$totalCompra = array_sum(array_map(function($item) {
+    return $item[2] * $item[5]; // cantidad * precio final
+}, $data));
 
 class PDF extends FPDF
 {
@@ -263,7 +258,7 @@ class PDF extends FPDF
         $this->SetTextColor(0, 0, 0);
 
         // Calculate width for each column with additional spacing
-        $widths = array(30, 80, 40, 40, 40); // Ajustar los anchos de las columnas con espaciado
+        $widths = array(30, 80, 20, 30, 30, 40); // Ajustar los anchos de las columnas con espaciado
         $x = 10; // Position to the left with some margin
         $y = $this->GetY() + 5; // Spacing below the header
 
@@ -281,7 +276,7 @@ class PDF extends FPDF
         $this->SetTextColor(0, 0, 0);
         foreach ($data as $row) {
             foreach ($row as $key => $col) {
-                $align = in_array($key, [0, 2, 3, 4]) ? 'R' : 'L'; // Alinear a la derecha ID, precio, descuento y precio final
+                $align = in_array($key, [0, 2, 3, 4, 5]) ? 'R' : 'L'; // Alinear a la derecha ID, cantidad, precio, descuento y precio final
                 $this->Cell($widths[$key], 6, $col, 0, 0, $align);
             }
             $this->Ln();
@@ -331,12 +326,12 @@ $pdf->AddContactInfo($correo, $telefono);
 $pdf->AddProductsHeader('PRODUCTOS');
 
 // Agregar la tabla de productos
-$header = array('ID', 'Nombre', 'Precio', 'Descuento', 'Precio Final');
+$header = array('ID', 'Nombre', 'Cantidad', 'Precio', 'Descuento', 'Precio Final');
 $pdf->AddProductsTable($header, $data);
 
 // Agregar el total de la compra
 $pdf->AddTotalAmount($totalCompra);
 
 // Output the PDF
-$pdf->Output();
+$pdf->Output('I', 'Order_' . $orderId . '.pdf');
 ?>
