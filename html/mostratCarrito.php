@@ -11,6 +11,16 @@
     <link href="../css/index.css?ver=2.0" rel="stylesheet">
     <!-- ICONO -->
     <link rel="icon" href="../imgs/icono.ico" type="image/x-icon">
+    <style>
+        /* Centered button styling */
+        .center-button {
+            display: block;
+            width: fit-content;
+            margin: 10px auto; /* centers the button horizontally */
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
 </head>
 
 <body>
@@ -89,6 +99,7 @@ if (isset($_SESSION['correo'])) {
 
         } else {
             echo "<p>No hay productos en el carrito.</p>";
+            echo '<a href="../html/index.php" class="btn btn-primary center-button" style="padding: 10px 20px; font-size: 16px;">Regresar al inicio</a>';
         }
     } else {
         echo "<p>Error al obtener el usuario.</p>";
