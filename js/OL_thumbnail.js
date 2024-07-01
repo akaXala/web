@@ -1,3 +1,4 @@
+// Fetch and display the daily logins for the last 3 days
 fetch('../php/obtenerRegistrosDiarios.php')
     .then(response => {
         if (!response.ok) {
@@ -10,11 +11,11 @@ fetch('../php/obtenerRegistrosDiarios.php')
             throw new Error(data.error);
         }
 
-        // Filtra solo los últimos 7 días
-        const recentData = data.slice(-7);
+        // Limita los datos a los últimos 3 días
+        const lastThreeDays = data.slice(-3);
 
-        const labels = recentData.map(registro => registro.fecha);
-        const conteos = recentData.map(registro => registro.conteo);
+        const labels = lastThreeDays.map(registro => registro.fecha);
+        const conteos = lastThreeDays.map(registro => registro.conteo);
 
         const ctxLogins = document.getElementById('loginsChart').getContext('2d');
         const loginsChart = new Chart(ctxLogins, {

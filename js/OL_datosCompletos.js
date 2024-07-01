@@ -10,13 +10,11 @@ fetch('../php/obtenerRegistrosDiarios.php')
             throw new Error(data.error);
         }
 
-        // Filtra solo los últimos 7 días
-        const recentData = data.slice(-7);
+        // Utiliza todos los datos disponibles en lugar de solo los últimos 7 días
+        const labels = data.map(registro => registro.fecha);
+        const conteos = data.map(registro => registro.conteo);
 
-        const labels = recentData.map(registro => registro.fecha);
-        const conteos = recentData.map(registro => registro.conteo);
-
-        const ctxLogins = document.getElementById('loginsChart').getContext('2d');
+        const ctxLogins = document.getElementById('myChart').getContext('2d');
         const loginsChart = new Chart(ctxLogins, {
             type: 'line',
             data: {

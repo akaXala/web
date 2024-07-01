@@ -53,6 +53,6 @@ if ($result) {
         <canvas id="myChart"></canvas>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="../js/graficas_compras.js"></script>
+    <script src="../js/OC_thumbnail.js"></script>
 </body>
 </html>
