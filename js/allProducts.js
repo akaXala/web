@@ -6,23 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let productSearch = urlParams.get("productSearch");
   let category = urlParams.get("category");
   let products = [];
-  // Get the current page path
-  const path = window.location.pathname;
-
-  // Extract the file extension
-  const fileExtension = path.split(".").pop();
-
-  console.log(`File extension: ${fileExtension}`);
-
-  // Declare the address variable
-  let address;
-
-  // Assign a value to address based on the file extension
-  if (fileExtension === "html") {
-    address = "./detallesProducto.html";
-  } else {
-    address = "./dpIniciado.php";
-  }
 
   console.log(`Address: ${address}`);
 
@@ -60,15 +43,11 @@ document.addEventListener("DOMContentLoaded", () => {
 function displayProducts(products, filter = "") {
   // Get the current page path
   const path = window.location.pathname;
-
   // Extract the file extension
   const fileExtension = path.split(".").pop();
-
   console.log(`File extension: ${fileExtension}`);
-
   // Declare the address variable
   let address;
-
   // Assign a value to address based on the file extension
   if (fileExtension === "html") {
     address = "./detallesProducto.html";
@@ -76,7 +55,6 @@ function displayProducts(products, filter = "") {
     address = "./dpIniciado.php";
   }
 
-  console.log(`Address: ${address}`);
   let filas = "";
   let col = 0;
 
