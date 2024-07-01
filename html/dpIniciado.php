@@ -1,3 +1,64 @@
+<?php session_start(); 
+       include '../php/conexion.php'; // Include the database connection
+// Redirect users without an active session
+if (!isset($_SESSION['correo'])) {
+    header("Location: login.html"); // Ajusta la ruta según sea necesario
+    exit;
+    // Get the userId through the email
+}
+$email = $_SESSION['correo'];
+// Perform a database query to retrieve the userId based on the email
+// Replace 'your_database_table' with the actual table name in your database
+$query = "SELECT id, permiso, creditos FROM usuarios WHERE correo = '$email'";
+$result = mysqli_query($conn, $query);
+
+if ($result) {
+    // Check if a row is returned
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $creditos = $row['creditos'];
+        $userId = $row['id'];
+        $permiso = $row['permiso'];
+
+        // Check if the 'permiso' value is 1
+        if ($permiso == 1) {
+            header("Location: admin.php");
+            exit;
+        }
+    }
+}
+
+require_once "../php/conexion.php";
+$correo = $_SESSION['correo']; // Asegúrate de tener esta variable en la sesión
+
+// Consulta para obtener el ID del usuario y el nombre desde el correo
+$stmt = $conn->prepare("SELECT id, nombre FROM usuarios WHERE correo = ?");
+$stmt->bind_param("s", $correo);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+
+if ($user) {
+    $usuario_id = $user['id'];
+    $nombre_usuario = $user['nombre'];
+} else {
+    // Si no se encuentra el usuario, redirigir o manejar el error
+    echo "Usuario no encontrado.";
+    exit;
+}
+
+$stmt->close();
+
+// Consulta para contar los artículos en el carrito
+$stmt = $conn->prepare("SELECT COUNT(*) AS num_articulos FROM carritos WHERE idUsuario = ?");
+$stmt->bind_param("i", $usuario_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+$num_articulos = $row['num_articulos']; // Cantidad de artículos en el carrito
+$stmt->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,7 +118,7 @@
                 <a href="./mostratCarrito.php">
                     <button type="button" class="btn position-relative">
                         <i class="fa fa-shopping-cart"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge bg-primary"><?php echo $num_articulos; ?></span>
+                        <span id="cart-item-count" class="position-absolute top-0 start-100 translate-middle badge bg-primary">0</span>
                     </button>
                 </a>
             </div>
@@ -66,10 +127,10 @@
                     <i class="fa-solid fa-user"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end ">
-                    <li><p class="d-flex justify-content-center">Welcome</p></li>
+                <li><p class="d-flex justify-content-center">Welcome</p></li>
                     <li><p class="d-flex justify-content-center"><?php echo $nombre_usuario; ?></p></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item py-2" href="#">Purchases</a></li>
+                    <li><span class="d-flex justify-content-center">Creditos: <?php echo $creditos; ?></span></li>
                     <li><form class="d-flex justify-content-center">
                         <a href="../php/logout.php">
                             <button class="btn btn-outline-success me-2" type="button">Log out</button>
@@ -84,9 +145,17 @@
             </button>
         </div>
     </nav>
-    <section>
-        <div id="products-container"></div>
-        <div id="pagination-container" class="d-flex justify-content-center mt-4"></div>
+            <!-- boton retraible -->
+            <button class="navbar-toggler flex-grow-0 px-0 py-0" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+    <section id="DetallesProductos">
+        <div class="container">
+            <div id="product-details"></div>
+        </div>
     </section>
     <footer-js></footer-js>
     <script src="../js/detallesProducto.js"></script>

@@ -1,9 +1,31 @@
-<?php
-session_start(); 
-// Redirigir usuarios sin una sesión activa
+<?php session_start(); 
+       include '../php/conexion.php'; // Include the database connection
+// Redirect users without an active session
 if (!isset($_SESSION['correo'])) {
     header("Location: login.html"); // Ajusta la ruta según sea necesario
     exit;
+    // Get the userId through the email
+}
+$email = $_SESSION['correo'];
+// Perform a database query to retrieve the userId based on the email
+// Replace 'your_database_table' with the actual table name in your database
+$query = "SELECT id, permiso, creditos FROM usuarios WHERE correo = '$email'";
+$result = mysqli_query($conn, $query);
+
+if ($result) {
+    // Check if a row is returned
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $creditos = $row['creditos'];
+        $userId = $row['id'];
+        $permiso = $row['permiso'];
+
+        // Check if the 'permiso' value is 1
+        if ($permiso == 1) {
+            header("Location: admin.php");
+            exit;
+        }
+    }
 }
 
 require_once "../php/conexion.php";
@@ -103,10 +125,10 @@ $stmt->close();
                     <i class="fa-solid fa-user"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end ">
-                    <li><p class="d-flex justify-content-center">Welcome</p></li>
+                <li><p class="d-flex justify-content-center">Welcome</p></li>
                     <li><p class="d-flex justify-content-center"><?php echo $nombre_usuario; ?></p></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item py-2" href="#">Purchases</a></li>
+                    <li><span class="d-flex justify-content-center">Creditos: <?php echo $creditos; ?></span></li>
                     <li><form class="d-flex justify-content-center">
                         <a href="../php/logout.php">
                             <button class="btn btn-outline-success me-2" type="button">Log out</button>

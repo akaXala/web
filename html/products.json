@@ -188,7 +188,7 @@
             "price": 12.99,
             "discountPercentage": 19.03,
             "rating": 2.51,
-            "stock": 68,
+            "stock":    68,
             "tags": [
                 "beauty",
                 "lipstick"

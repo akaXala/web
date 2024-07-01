@@ -132,7 +132,6 @@ $stmt->close();
                     <li><p class="d-flex justify-content-center">Welcome</p></li>
                     <li><p class="d-flex justify-content-center"><?php echo $nombre_usuario; ?></p></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item py-2" href="#">Purchases</a></li>
                     <li><span class="d-flex justify-content-center">Creditos: <?php echo $creditos; ?></span></li>
                     <li><form class="d-flex justify-content-center">
                         <a href="../php/logout.php">
