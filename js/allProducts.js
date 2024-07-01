@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
   // Event listener for the form submission
-  document.querySelector("input").addEventListener("submit", (event) => {
+  document.querySelector("form").addEventListener("submit", (event) => {
     event.preventDefault();
     const searchTerm = document
       .getElementById("productSearch")
@@ -51,6 +51,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setupPagination(products, category = "", filter = "") {
     const paginationContainer = document.getElementById("pagination-container");
+    if (!paginationContainer) {
+      console.error("No se encontró el contenedor de paginación.");
+      return;
+    }
     const filteredProducts = filter
       ? products.filter((product) =>
           product.title.toLowerCase().includes(filter)
@@ -66,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     paginationHTML += `<li class="page-item ${
       currentPage === 1 ? "disabled" : ""
     }">
-      <a class="page-link" href="#" onclick="changePage(${
+      <a class="page-link" href="#" onclick="changePage(event, ${
         currentPage - 1
       })">Anterior</a>
     </li>`;
@@ -75,14 +79,14 @@ document.addEventListener("DOMContentLoaded", () => {
       paginationHTML += `<li class="page-item ${
         i === currentPage ? "active" : ""
       }">
-        <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
+        <a class="page-link" href="#" onclick="changePage(event, ${i})">${i}</a>
       </li>`;
     }
 
     paginationHTML += `<li class="page-item ${
       currentPage === totalPages ? "disabled" : ""
     }">
-      <a class="page-link" href="#" onclick="changePage(${
+      <a class="page-link" href="#" onclick="changePage(event, ${
         currentPage + 1
       })">Siguiente</a>
     </li>`;
@@ -90,8 +94,14 @@ document.addEventListener("DOMContentLoaded", () => {
     paginationContainer.innerHTML = `<ul class="pagination">${paginationHTML}</ul>`;
   }
 
-  window.changePage = (page) => {
-    const totalPages = Math.ceil(products.length / itemsPerPage);
+  window.changePage = (event, page) => {
+    event.preventDefault(); // Prevent the default link behavior
+    const filteredProducts = filterProducts(
+      products,
+      category,
+      document.getElementById("productSearch").value.toLowerCase()
+    );
+    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
     if (page >= 1 && page <= totalPages) {
       currentPage = page;
       const searchTerm = document
@@ -99,8 +109,8 @@ document.addEventListener("DOMContentLoaded", () => {
         .value.toLowerCase();
       const urlParams = new URLSearchParams(window.location.search);
       let category = urlParams.get("category");
-      displayProducts(products, searchTerm, category);
-      setupPagination(products, category, searchTerm); // Update pagination based on current page
+      displayProducts(filteredProducts, searchTerm, category);
+      setupPagination(filteredProducts, category, searchTerm); // Update pagination based on current page
     }
   };
 
@@ -174,7 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <h5 class="card-title d-flex justify-content-start" style="min-height: 3em;">${
                 product.title
               }</h5>
-              <p class="card-text d-flex mb-0 justify-content-start text-decoration-line-through fw-light">$ ${
+              <p class="card-text d-flex mb-0 justify-content-start text-decoration-line-through fw-light">$${
                 product.price
               }</p>
               <div class="d-flex justify-content-between my-0 py-0">
@@ -208,5 +218,17 @@ document.addEventListener("DOMContentLoaded", () => {
     currentPage = 1;
     displayProducts(products, "", category);
     setupPagination(products, category); // Update pagination based on category
+  }
+
+  function filterProducts(products, category, searchTerm) {
+    return searchTerm
+      ? products.filter((product) =>
+          product.title.toLowerCase().includes(searchTerm)
+        )
+      : category
+      ? products.filter(
+          (product) => product.category.toLowerCase() === category
+        )
+      : products;
   }
 });

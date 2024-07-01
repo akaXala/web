@@ -108,9 +108,10 @@ $stmt->close();
                 <!-- Items retraibles -->
                 <div class="offcanvas-body">
                     <ul class="navbar-nav justify-content-end">
-                        <li class="nav-item"><a class="nav-link" href="#offers">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#categories">Category</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#popular">Popular</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="./index.php#popular">Popular</a></li>
+                        <li class="nav-item"><a class="nav-link" href="./index.php#Beneficios">Benefits</a></li>
+                        <li class="nav-item"><a class="nav-link" href="./index.php#categories">Category</a></li>
                     </ul>
                 </div>
             </div>
@@ -131,8 +132,7 @@ $stmt->close();
                     <li><p class="d-flex justify-content-center">Welcome</p></li>
                     <li><p class="d-flex justify-content-center"><?php echo $nombre_usuario; ?></p></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item py-2" href="#">Purchases</a></li>
-                    <li><span>Creditos: <?php echo $creditos; ?></span></li>
+                    <li><span class="d-flex justify-content-center">Creditos: <?php echo $creditos; ?></span></li>
                     <li><form class="d-flex justify-content-center">
                         <a href="../php/logout.php">
                             <button class="btn btn-outline-success me-2" type="button">Log out</button>
@@ -272,8 +272,56 @@ $stmt->close();
             </button>
         </div>
     </section>
+    <!-- Seccion popular -->
+    <section id="popular" style="background-color: white; padding-top:8rem; padding-bottom:0rem;">
+        <div class="container">
+            <div class="row d-flex  justify-content-center align-items-center py-1 px-4 ">
+                <h2>Most Popular</h2>
+            </div>
+            <div id="products-container" class="row  d-flex  justify-content-center align-items-center">
+            </div>
+        </div>
+    </section>
+    <!-- Seccion Beneficios -->
+    <div id="Beneficios" style=" background-color: white; padding: 4rem;"></div>
+    <section style="background-color: #d5eaff; padding-top: 3rem;padding-bottom: 3rem;">
+        <div class="container">
+            <div class="row  d-flex row justify-content-center align-items-center">
+                <div class="card d-flex mx-5 my-3"
+                    style="width: 18rem;background-color: #0b5ed7; border-radius: 40px;color: white;">
+                    <div class="card-body">
+                        <i class="fa-solid fa-truck fa-8x d-flex justify-content-center py-1"></i>
+                        <h2 class="card-title d-flex justify-content-center">Free Delivery</h2>
+                        <p class="card-text d-flex justify-content-center py-2">Shop online and enjoy free delivery from
+                            XalaStore. No extra costs, just
+                            convenience. Get your favorite items delivered to your doorstep for free. Shop now!</p>
+                    </div>
+                </div>
+                <div class="card d-flex mx-5 my-3"
+                    style="width: 18rem;background-color: #0b5ed7; border-radius: 40px;color: white;">
+                    <div class="card-body">
+                        <i class="fa-solid fa-money-check-dollar fa-8x d-flex justify-content-center py-1"></i>
+                        <h2 class="card-title d-flex justify-content-center">Safe Shopping</h2>
+                        <p class="card-text d-flex justify-content-center py-2">Our advanced encryption and trusted
+                            payment methods protect your personal information. Enjoy worry-free shopping with our secure
+                            checkout process. Shop safely today!</p>
+                    </div>
+                </div>
+                <div class="card d-flex mx-5 my-3"
+                    style="width: 18rem;background-color: #0b5ed7; border-radius: 40px;color: white;">
+                    <div class="card-body">
+                        <i class="fa-solid fa-boxes-packing fa-8x d-flex justify-content-center py-1"></i>
+                        <h2 class="card-title d-flex justify-content-center">Returns</h2>
+                        <p class="card-text d-flex justify-content-center py-2">Not satisfied with your purchase? No
+                            problem! Easily return items within 30 days. Our customer service team is here to help.
+                            Enjoy stress-free returns at XalaStore.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <!-- Seccion de Categorias-->
-    <section id="categories" style="background-color: white; padding-top:5rem; padding-bottom:5rem;">
+    <section id="categories" style="background-color: white; padding-top:8rem; padding-bottom:8rem;">
         <div id="carouselCategories" class="container carousel slide">
             <div class="row row-cols-2">
                 <!-- Titulo -->
@@ -302,7 +350,7 @@ $stmt->close();
                         <div class="row flex-grow-1 py-1">
                             <div class="col d-flex justify-content-center align-items-center">
                                 <div class="col d-flex justify-content-center">
-                                    <a id="beauty" class="btn" href="././allProducts.php?category=beauty">
+                                    <a id="beauty" class="btn" href="./allProducts.php?category=beauty">
                                         <div class="card border-0" style="width: 15rem; height: 15rem;">
                                             <img src="../imgs/beauty.png" class="card-img " alt="beauty">
                                             <div
@@ -313,7 +361,7 @@ $stmt->close();
                                     </a>
                                 </div>
                                 <div class="col d-flex justify-content-center">
-                                    <a id="fragrances" class="btn" href="././allProducts.php?category=fragances">
+                                    <a id="fragrances" class="btn" href="./allProducts.php?category=fragrances">
                                         <div class="card border-0" style="width: 15rem; height: 15rem;">
                                             <img src="../imgs/fragrances.png" class="card-img " alt="fragrances">
                                             <div
@@ -326,7 +374,7 @@ $stmt->close();
                             </div>
                             <div class="col d-flex justify-content-center align-items-center">
                                 <div class="col d-flex justify-content-center">
-                                    <a id="furniture" class="btn" href="././allProducts.php?category=furniture">
+                                    <a id="furniture" class="btn" href="./allProducts.php?category=furniture">
                                         <div class="card border-0" style="width: 15rem; height: 15rem;">
                                             <img src="../imgs/furniture.png" class="card-img " alt="furniture">
                                             <div
@@ -337,7 +385,7 @@ $stmt->close();
                                     </a>
                                 </div>
                                 <div class="col d-flex justify-content-center">
-                                    <a id="groceries" class="btn" href="././allProducts.php?category=groceries">
+                                    <a id="groceries" class="btn" href="./allProducts.php?category=groceries">
                                         <div class="card border-0" style="width: 15rem; height: 15rem;">
                                             <img src="../imgs/groceries.png" class="card-img " alt="groceries">
                                             <div
@@ -356,26 +404,26 @@ $stmt->close();
                             <div class="col d-flex justify-content-center align-items-center">
                                 <div class="col d-flex justify-content-center">
                                     <a id="home-decoration" class="btn"
-                                        href="././allProducts.php?category=home-decoration">
+                                        href="./allProducts.php?category=home-decoration">
                                         <div class="card border-0" style="width: 15rem; height: 15rem;">
                                             <img src="../imgs/home-decoration.png" class="card-img "
                                                 alt="home-decoration">
                                             <div
                                                 class=" card-img-overlay d-flex align-items-end justify-content-center py-0">
-                                                <h5 class="card-title fw-bold">Home-decoration</h5>
+                                                <h5 class="card-title fw-bold">Home decoration</h5>
                                             </div>
                                         </div>
                                     </a>
                                 </div>
                                 <div class="col d-flex justify-content-center">
                                     <a id="kitchen-accessories" class="btn"
-                                        href="././allProducts.php?category=kitchen-accessories">
+                                        href="./allProducts.php?category=kitchen-accessories">
                                         <div class="card border-0" style="width: 15rem; height: 15rem;">
                                             <img src="../imgs/kitchen-accessories.png" class="card-img "
                                                 alt="kitchen-accessories">
                                             <div
                                                 class=" card-img-overlay d-flex align-items-end justify-content-center py-0">
-                                                <h5 class="card-title fw-bold">kitchen Accessories</h5>
+                                                <h5 class="card-title fw-bold">Kitchen accessories</h5>
                                             </div>
                                         </div>
                                     </a>
@@ -383,23 +431,23 @@ $stmt->close();
                             </div>
                             <div class="col d-flex justify-content-center align-items-center">
                                 <div class="col d-flex justify-content-center">
-                                    <a id="laptops" class="btn" href="././allProducts.php?category=laptops">
+                                    <a id="laptops" class="btn" href="./allProducts.php?category=laptops">
                                         <div class="card border-0" style="width: 15rem; height: 15rem;">
                                             <img src="../imgs/laptops.png" class="card-img " alt="laptops">
                                             <div
                                                 class=" card-img-overlay d-flex align-items-end justify-content-center py-0">
-                                                <h5 class="card-title fw-bold">laptops</h5>
+                                                <h5 class="card-title fw-bold">Laptops</h5>
                                             </div>
                                         </div>
                                     </a>
                                 </div>
                                 <div class="col d-flex justify-content-center">
-                                    <a id="mens-shirts" class="btn" href="././allProducts.php?category=mens-shirts">
+                                    <a id="mens-shirts" class="btn" href="./allProducts.php?category=mens-shirts">
                                         <div class="card border-0" style="width: 15rem; height: 15rem;">
                                             <img src="../imgs/mens-shirts.png" class="card-img " alt="mens-shirts">
                                             <div
                                                 class=" card-img-overlay d-flex align-items-end justify-content-center py-0">
-                                                <h5 class="card-title fw-bold">Men's Shirts</h5>
+                                                <h5 class="card-title fw-bold">Men's shirts</h5>
                                             </div>
                                         </div>
                                     </a>
@@ -412,7 +460,7 @@ $stmt->close();
                         <div class="row flex-grow-1 py-1">
                             <div class="col d-flex justify-content-center align-items-center">
                                 <div class="col d-flex justify-content-center">
-                                    <a id="mens-shoes" class="btn" href="././allProducts.php?category=mens-shoes">
+                                    <a id="mens-shoes" class="btn" href="./allProducts.php?category=mens-shoes">
                                         <div class="card border-0" style="width: 15rem; height: 15rem;">
                                             <img src="../imgs/mens-shoes.png" class="card-img " alt="mens-shoes">
                                             <div
@@ -424,7 +472,7 @@ $stmt->close();
                                 </div>
                                 <div class="col d-flex justify-content-center">
                                     <a id="mobile-accessories" class="btn"
-                                        href="././allProducts.php?category=mobile-accessories">
+                                        href="./allProducts.php?category=mobile-accessories">
                                         <div class="card border-0" style="width: 15rem; height: 15rem;">
                                             <img src="../imgs\mobile-accessories​.png" class="card-img "
                                                 alt="mobile-accessories">
@@ -438,7 +486,7 @@ $stmt->close();
                             </div>
                             <div class="col d-flex justify-content-center align-items-center">
                                 <div class="col d-flex justify-content-center">
-                                    <a id="mens-watches" class="btn" href="././allProducts.php?category=mens-watches">
+                                    <a id="mens-watches" class="btn" href="./allProducts.php?category=mens-watches">
                                         <div class="card border-0" style="width: 15rem; height: 15rem;">
                                             <img src="../imgs/mens-watches.png" class="card-img " alt="mens-watches">
                                             <div
@@ -455,17 +503,6 @@ $stmt->close();
             </div>
         </div>
         <!-- Controles del carrito previous y next -->
-        </div>
-    </section>
-    <!-- Seccion popular -->
-    <section id="popular">
-        <div class="container">
-            <div class="row  d-flex  justify-content-center align-items-center py-1 px-4 ">
-                <h2>Best Rankings</h2>
-            </div>
-            <div id="products-container" class="row ">
-            </div>
-
         </div>
     </section>
     <footer-js></footer-js>

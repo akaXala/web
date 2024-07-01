@@ -5,3 +5,11 @@ body {
     background-color: white;
     padding-top: 66px;
 }
+.img-fixed-size {
+    width: 100%;
+    height: 39rem;
+    object-fit: contain;
+  }
+  .custom-hr {
+    margin: 5px 0; /* Reduce el margen superior e inferior */
+  }

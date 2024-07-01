@@ -1,9 +1,31 @@
-<?php
-session_start(); 
-// Redirigir usuarios sin una sesión activa
+<?php session_start(); 
+       include '../php/conexion.php'; // Include the database connection
+// Redirect users without an active session
 if (!isset($_SESSION['correo'])) {
     header("Location: login.html"); // Ajusta la ruta según sea necesario
     exit;
+    // Get the userId through the email
+}
+$email = $_SESSION['correo'];
+// Perform a database query to retrieve the userId based on the email
+// Replace 'your_database_table' with the actual table name in your database
+$query = "SELECT id, permiso, creditos FROM usuarios WHERE correo = '$email'";
+$result = mysqli_query($conn, $query);
+
+if ($result) {
+    // Check if a row is returned
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $creditos = $row['creditos'];
+        $userId = $row['id'];
+        $permiso = $row['permiso'];
+
+        // Check if the 'permiso' value is 1
+        if ($permiso == 1) {
+            header("Location: admin.php");
+            exit;
+        }
+    }
 }
 
 require_once "../php/conexion.php";
@@ -43,8 +65,6 @@ $stmt->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página Web</title>
-    <!-- JQuery -->
-    <script src="../js/jquery-3.7.1.min.js"></script>
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -98,7 +118,7 @@ $stmt->close();
                 <a href="./mostratCarrito.php">
                     <button type="button" class="btn position-relative">
                         <i class="fa fa-shopping-cart"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge bg-primary"><?php echo $num_articulos; ?></span>
+                        <span id="cart-item-count" class="position-absolute top-0 start-100 translate-middle badge bg-primary">0</span>
                     </button>
                 </a>
             </div>
@@ -107,10 +127,10 @@ $stmt->close();
                     <i class="fa-solid fa-user"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end ">
-                    <li><p class="d-flex justify-content-center">Welcome</p></li>
+                <li><p class="d-flex justify-content-center">Welcome</p></li>
                     <li><p class="d-flex justify-content-center"><?php echo $nombre_usuario; ?></p></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item py-2" href="#">Purchases</a></li>
+                    <li><span class="d-flex justify-content-center">Creditos: <?php echo $creditos; ?></span></li>
                     <li><form class="d-flex justify-content-center">
                         <a href="../php/logout.php">
                             <button class="btn btn-outline-success me-2" type="button">Log out</button>
@@ -131,11 +151,12 @@ $stmt->close();
                 <span class="navbar-toggler-icon"></span>
             </button>
         </div>
-    </nav>>
-    <main class="container mt-5">
-        <div id="product-details"></div>
-        <a href="./index.php"><div id="AddCar"></div></a> <!-- Contenedor para el botón Add to Cart -->
-    </main>
+    </nav>
+    <section id="DetallesProductos">
+        <div class="container">
+            <div id="product-details"></div>
+        </div>
+    </section>
     <footer-js></footer-js>
     <script src="../js/detallesProducto.js"></script>
 </body>
