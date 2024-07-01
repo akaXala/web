@@ -6,7 +6,7 @@ header('Content-Type: application/json');
 // Asegurarse de que no hay ninguna salida antes de esta línea
 ob_start();
 
-$sql = "SELECT fecha, conteo FROM `registro_diario` ORDER BY fecha DESC LIMIT 10";
+$sql = "SELECT fecha, conteo FROM `registro_diario` ORDER BY fecha DESC";
 $result = $conn->query($sql);
 
 $registros = [];

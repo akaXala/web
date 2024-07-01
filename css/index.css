@@ -10,6 +10,11 @@
 body header .marquee .marquee-text {
     color: grey; /* Replace #yourColor with your desired color */
 }
+
+body.sin-id {
+  padding: 0;
+}
+
 /* Estilos personalizados para el botón toggler */
 .custom-toggler .navbar-toggler {
     border: none;

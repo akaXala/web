@@ -69,9 +69,9 @@ if (!empty($productIds)) {
                 $data[] = array(
                     $row3['id'],
                     $row3['titulo'],
-                    number_format($row3['precio'], 2),
-                    number_format($row3['descuento_final'], 2),
-                    number_format($row3['precio_final'], 2)
+                    floatval($row3['precio']), // Convertir a float
+                    floatval($row3['descuento_final']), // Convertir a float
+                    floatval($row3['precio_final']) // Convertir a float
                 );
             }
         }
@@ -80,6 +80,14 @@ if (!empty($productIds)) {
 
 // Calcular el total de la compra
 $totalCompra = array_sum(array_column($data, 4));
+
+// Formatear los valores para mostrarlos en el PDF
+foreach ($data as &$row) {
+    $row[2] = number_format($row[2], 2); // Formatear precio
+    $row[3] = number_format($row[3], 2); // Formatear descuento
+    $row[4] = number_format($row[4], 2); // Formatear precio final
+}
+unset($row);
 
 class PDF extends FPDF
 {
@@ -305,7 +313,7 @@ $pdf->AddPage();
 $pdf->AddOrderTicket('ORDER TICKET No. ' . $orderId);
 
 // Agregar una imagen al PDF y texto al lado de la imagen
-$pdf->AddImageWithText('../imgs/logo1.png', 10, 30, 30, 'XALA STORE S.A DE C.V', 'ESCUELA SUPERIOR DE COMPUTO', 'UNIDAD PROFESIONAL ADOLFO LOPEZ MATEOS', 'GUSTAVO A. MADERO, CIUDAD DE MEXICO C.P. 07320', $orderDate);
+$pdf->AddImageWithText('../imgs/logo1.png', 10, 30, 30, 'XALA STORE S.A DE C.V', 'ESCUELA SUPERIOR DE COMPUTO', 'UNIDAD PROFESIONAL ADOLFO LOPEZ MATEOS', 'GUSTAVO A. MADERO, CIUDAD DE MEXICO C.P. 07320', 'FECHA Y HORA: ' . $orderDate);
 
 // Agregar el texto alineado a la izquierda debajo de la imagen
 $pdf->AddLeftAlignedText('CLIENTE');
