@@ -96,14 +96,14 @@ if ($resultOrders) {
                 <!-- Items retraibles -->
                 <div class="offcanvas-body">
                     <ul class="navbar-nav justify-content-end">
-                        <li class="nav-item"><a class="nav-link" href="admin.php">Página principal</a></li>
-                        <li class="nav-item"><a class="nav-link" href="PDF.php">Facturas</a></li>
-                        <li class="nav-item"><a class="nav-link" href="productos.php">Administrar productos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#popular">Más opciones</a></li>
+                        <li class="nav-item"><a class="nav-link" href="admin.php">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="PDF.php">Bills</a></li>
+                        <li class="nav-item"><a class="nav-link" href="productos.php">Manage Products</a></li>
+                        <li class="nav-item"><a class="nav-link" href="moreOptions.php">More Options</a></li>
                     </ul>
                     <!-- login -->
                     <form class="flex-grow-0">
-                        <a href="../php/logout.php" class="btn btn-danger">Cerrar sesión</a>
+                        <a href="../php/logout.php" class="btn btn-danger">Log out</a>
                     </form>
                 </div>
             </div>
@@ -115,7 +115,7 @@ if ($resultOrders) {
         </div>
     </nav>
     <div class="container mt-4">
-        <h2>Historial de compras</h2>
+        <h2 class="text-center">Shopping history</h2>
         <!-- Filtrado y ordenación -->
         <div class="row mb-3">
             <div class="col-md-4">

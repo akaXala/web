@@ -89,7 +89,7 @@ if ($result) {
                         <li class="nav-item"><a class="nav-link" href="admin.php">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="PDF.php">Bills</a></li>
                         <li class="nav-item"><a class="nav-link" href="productos.php">Manage Products</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#popular">More Options</a></li>
+                        <li class="nav-item"><a class="nav-link" href="moreOptions.php">More Options</a></li>
                     </ul>
                     <!-- login -->
                     <form class="flex-grow-0">
@@ -109,14 +109,14 @@ if ($result) {
         <h1 class="display-5">Statistics Charts</h1>
         <div class="graph-row">
             <div class="graph-container">
-                <h1 class="formTitle">Registros últimos 3 días</h1>
+                <h1 class="formTitle">Registrations last 3 days</h1>
                 <iframe src="GL_thumbnail.php" style="width: 100%; height: 240px; border: none;"></iframe>
-                <button class="btn btn-primary mt-2" style="background-color: rgba(255, 99, 132, 1);" onclick="showModal('loginsModal', 'graficas_logins.php')">Ver más detalles</button>
+                <button class="btn btn-primary mt-2" style="background-color: rgba(255, 99, 132, 1);" onclick="showModal('loginsModal', 'graficas_logins.php')">See more details</button>
             </div>
             <div class="graph-container">
-                <h1 class="formTitle">Top 3 más comprados</h1>
+                <h1 class="formTitle">Top 3 most purchased</h1>
                 <iframe src="GC_thumbnail.php" style="width: 100%; height: 240px; border: none;"></iframe>
-                <button class="btn btn-primary mt-2" style="background-color: rgba(75, 192, 192, 1);" onclick="showModal('comprasModal', 'graficas_compras.php')">Ver más detalles</button>
+                <button class="btn btn-primary mt-2" style="background-color: rgba(75, 192, 192, 1);" onclick="showModal('comprasModal', 'graficas_compras.php')">See more details</button>
             </div>
         </div>
     </main>
@@ -126,17 +126,17 @@ if ($result) {
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="loginsModalLabel">Gráfica de Registros Última Semana</h5>
+                    <h5 class="modal-title" id="loginsModalLabel">Record Chart Last Week</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <iframe id="loginsIframe" src="" style="width: 100%; height: 300px; border: none;"></iframe>
                     <div class="d-flex justify-content-center mt-3">
-                        <a class="btn btn-primary mt-2" href="GL_datosCompletos.php" target="_blank">Revisar gráfica completa</a>
+                        <a class="btn btn-primary mt-2" href="GL_datosCompletos.php" target="_blank">Review complete graph</a>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -147,17 +147,17 @@ if ($result) {
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="comprasModalLabel">Gráfica de Más Comprados (Top 10)</h5>
+                    <h5 class="modal-title" id="comprasModalLabel">Most Purchased Chart (Top 10)</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <iframe id="comprasIframe" src="" style="width: 100%; height: 300px; border: none;"></iframe>
                     <div class="d-flex justify-content-center mt-3">
-                        <a class="btn btn-primary mt-2" href="GC_datosCompletos.php" target="_blank">Revisar gráfica completa</a>
+                        <a class="btn btn-primary mt-2" href="GC_datosCompletos.php" target="_blank">Review complete graph</a>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

@@ -80,14 +80,14 @@ if ($resultProductos) {
                 <!-- Items retraibles -->
                 <div class="offcanvas-body">
                     <ul class="navbar-nav justify-content-end">
-                        <li class="nav-item"><a class="nav-link" href="admin.php">Página principal</a></li>
-                        <li class="nav-item"><a class="nav-link" href="PDF.php">Facturas</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Administrar productos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#popular">Más opciones</a></li>
+                        <li class="nav-item"><a class="nav-link" href="admin.php">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="PDF.php">Bills</a></li>
+                        <li class="nav-item"><a class="nav-link" href="productos.php">Manage Products</a></li>
+                        <li class="nav-item"><a class="nav-link" href="moreOptions.php">More Options</a></li>
                     </ul>
                     <!-- login -->
                     <form class="flex-grow-0">
-                        <a href="../php/logout.php" class="btn btn-danger">Cerrar sesión</a>
+                        <a href="../php/logout.php" class="btn btn-danger">Log out</a>
                     </form>
                 </div>
             </div>
@@ -99,7 +99,7 @@ if ($resultProductos) {
         </div>
     </nav>
     <div class="container mt-4">
-        <h2>Productos de la tienda</h2>
+        <h2 class="text-center">Store products</h2>
         <!-- Búsqueda y Ordenación -->
         <div class="row mb-3">
             <div class="col-md-4">
@@ -107,12 +107,12 @@ if ($resultProductos) {
             </div>
             <div class="col-md-4">
                 <select id="sortOrder" class="form-select">
-                    <option value="id_asc">ID Ascendente</option>
-                    <option value="id_desc">ID Descendente</option>
-                    <option value="price_asc">Precio Ascendente</option>
-                    <option value="price_desc">Precio Descendente</option>
-                    <option value="stock_asc">Stock Ascendente</option>
-                    <option value="stock_desc">Stock Descendente</option>
+                    <option value="id_asc">Ascending ID</option>
+                    <option value="id_desc">Descending ID</option>
+                    <option value="price_asc">Ascending Price</option>
+                    <option value="price_desc">Descending Price</option>
+                    <option value="stock_asc">Ascending Stock</option>
+                    <option value="stock_desc">Descending Stock</option>
                 </select>
             </div>
             <div class="col-md-4">
