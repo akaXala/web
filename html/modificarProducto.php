@@ -81,8 +81,10 @@ if (isset($_GET['productoId'])) {
                         <input type="text" class="form-control" id="stock" name="stock" value="<?php echo $product['stock']; ?>">
                     </div>
                     <div class="form-group">
-                        <label for="miniatura">Thumbnail URL</label>
-                        <input type="text" class="form-control" id="miniatura" name="miniatura" value="<?php echo $product['miniatura']; ?>">
+                        <label for="miniatura">Thumbnail</label>
+                        <div>
+                            <img src="<?php echo $product['miniatura']; ?>" alt="Thumbnail" class="img-fluid">
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Save Changes</button>
                 </form>

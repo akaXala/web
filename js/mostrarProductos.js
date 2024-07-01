@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td><img src="${product.miniatura}" alt="${product.titulo}" width="50" height="50"></td>
                 <td>
                     <a href='../html/modificarProducto.php?productoId=${product.id}' class='btn btn-secondary' style="display: block; margin-bottom: 10px;">Modify product</a>
-                    <a href='#' class='btn btn-danger' style="display: block; margin-bottom: 10px;">Remove product</a>
                 </td>
             `;
             productTableBody.appendChild(row);

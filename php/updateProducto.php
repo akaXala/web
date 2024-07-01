@@ -15,11 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $precio = $_POST['precio'];
     $descuento = $_POST['descuento'];
     $stock = $_POST['stock'];
-    $miniatura = $_POST['miniatura'];
 
-    // Update the product in the database
-    $query = $conn->prepare("UPDATE productos SET titulo = ?, precio = ?, descuento = ?, stock = ?, miniatura = ? WHERE id = ?");
-    $query->bind_param("sssssi", $titulo, $precio, $descuento, $stock, $miniatura, $id);
+    // Update the product in the database without modifying the thumbnail
+    $query = $conn->prepare("UPDATE productos SET titulo = ?, precio = ?, descuento = ?, stock = ? WHERE id = ?");
+    $query->bind_param("sssii", $titulo, $precio, $descuento, $stock, $id);
 
     if ($query->execute()) {
         echo "Product updated successfully.";

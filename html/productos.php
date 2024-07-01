@@ -102,10 +102,10 @@ if ($resultProductos) {
         <h2 class="text-center">Store products</h2>
         <!-- Búsqueda y Ordenación -->
         <div class="row mb-3">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <input type="text" id="searchInput" class="form-control" placeholder="Search by Title">
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <select id="sortOrder" class="form-select">
                     <option value="id_asc">Ascending ID</option>
                     <option value="id_desc">Descending ID</option>
@@ -114,9 +114,6 @@ if ($resultProductos) {
                     <option value="stock_asc">Ascending Stock</option>
                     <option value="stock_desc">Descending Stock</option>
                 </select>
-            </div>
-            <div class="col-md-4">
-                <button id="applyFilters" class="btn btn-primary w-100">Apply Filters</button>
             </div>
         </div>
 
