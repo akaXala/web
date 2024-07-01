@@ -32,7 +32,9 @@ function displayProductDetails(product) {
     for (let i = 0; i < product.images.length; i++) {
       imagesHTML += `
         <div class="carousel-item ${i === 0 ? "active" : ""}">
-            <img src="${product.images[i].trim()}" class="d-block w-100">
+            <img src="${product.images[
+              i
+            ].trim()}" class="img-fixed-size d-flex img-thumbnail">
         </div>`;
     }
 
@@ -49,26 +51,39 @@ function displayProductDetails(product) {
         </div>
         `;
   } else {
-    imagesHTML += `<img src="${product.images[0]}" class="img-fluid border">`;
+    imagesHTML += `<img src="${product.images[0]}" class="img-fixed-size img-fluid border img-thumbnail">`;
   }
 
   const productDetails = `
         <div class="container text-center">
             <div class="row">
-                <div class="col">
+                <div class="col-md-6 col-12">
                     ${imagesHTML}
                 </div>
-                <div class="col">
-                    <div class="row">
-                        <h5>${product.title}</h5>
+                <div class="col-md-6 col-12 d-flex flex-column justify-content-start align-items-center border border-2">
+                    <div class="w-100 text-start py=1">
+                        <h1 style="font-size:5rem">${product.title}</h1>
+                        <hr class="border  border-3 opacity-50">
                     </div>
-                    <div class="row">
-                        <p>${product.description}</p>
+                    <div class="w-100 text-start">
+                      <p style="font-size:1.5rem; font-weight:bold;">Description:</p>
+                      <p>${product.description}</p>
+                      <p style="font-size:1.5rem; font-weight:bold;">Characteristics:</p>
+                      <hr class="border  border-3 opacity-50">
+                      <ul>
+                        <li>Brand: ${product.brand}</li>
+                        <li>Weight: ${product.weight} oz</li>
+                        <li>Width: ${product.dimensions.width} in</li>
+                        <li>Height: ${product.dimensions.height} in</li>
+                        <li>Depth: ${product.dimensions.depth}</li>
+                        <li>Warrinty Information: ${product.warrantyInformation} in</li>
+                      </ul>
+                      <hr class="border  border-3 opacity-50">
                     </div>
-                    <div class="row">
+                    <div class="w-100 text-start">
                         <p>${product.di}</p>
                     </div>
-                    <div class="row">
+                    <div class="w-100 text-start">
                         <p>${product.price}</p>
                     </div>
                 </div>

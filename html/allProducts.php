@@ -43,8 +43,6 @@ $stmt->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página Web</title>
-    <!-- JQuery -->
-    <script src="../js/jquery-3.7.1.min.js"></script>
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -124,8 +122,8 @@ $stmt->close();
         </div>
     </nav>
     <section>
-        <div id="products-container">
-        </div>
+        <div id="products-container"></div>
+        <div id="pagination-container" class="d-flex justify-content-center mt-4"></div>
     </section>
 
     <footer-js></footer-js>

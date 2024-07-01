@@ -51,6 +51,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setupPagination(products, category = "", filter = "") {
     const paginationContainer = document.getElementById("pagination-container");
+    if (!paginationContainer) {
+      console.error("No se encontró el contenedor de paginación.");
+      return;
+    }
     const filteredProducts = filter
       ? products.filter((product) =>
           product.title.toLowerCase().includes(filter)
@@ -174,7 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <h5 class="card-title d-flex justify-content-start" style="min-height: 3em;">${
                 product.title
               }</h5>
-              <p class="card-text d-flex mb-0 justify-content-start text-decoration-line-through fw-light">$ ${
+              <p class="card-text d-flex mb-0 justify-content-start text-decoration-line-through fw-light">$${
                 product.price
               }</p>
               <div class="d-flex justify-content-between my-0 py-0">
